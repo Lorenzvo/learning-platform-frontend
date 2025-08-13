@@ -1,0 +1,21 @@
+.btn {
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn--md { padding: 0.75rem 1.25rem; font-size: 1rem; }
+.btn--sm { padding: 0.5rem 0.9rem;   font-size: 0.9rem; }
+
+.btn--primary {
+  background: #4f46e5; /* indigo-600-ish */
+  color: #fff;
+}
+.btn--primary:hover { filter: brightness(1.05); }
+
+.btn--secondary {
+  background: #e5e7eb; /* gray-200-ish */
+  color: #111827;      /* gray-900-ish */
+}
+.btn--secondary:hover { filter: brightness(0.98); }

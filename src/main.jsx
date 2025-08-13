@@ -3,13 +3,16 @@ import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 
-import App from './App.jsx'            // course list
-import Course from './pages/Course.jsx' // course detail
+// Import pages
+import { HomePage } from '@/component/HomePage/HomePage'
+import { CoursesPage } from '@/component/CoursesPage/CoursesPage'
+import { LoginPage } from '@/component/LoginPage/LoginPage' 
 
-// Router table. You can add more routes as the UI grows.
+// Define routes that actually exist
 const router = createBrowserRouter([
-  { path: '/', element: <App /> },
-  { path: '/:slug', element: <Course /> }, // e.g. /spring-boot-fundamentals
+  { path: '/', element: <HomePage /> },
+  { path: '/courses', element: <CoursesPage /> },
+  { path: '/login', element: <LoginPage /> },
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(

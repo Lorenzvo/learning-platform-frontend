@@ -1,0 +1,94 @@
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+.login-container {
+  position: relative;
+  width: 400px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 40px 32px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.login-header {
+  position: relative;
+  margin-bottom: 32px;
+}
+
+.background-image {
+  display: none;
+}
+
+.student-illustration {
+  width: 120px;
+  height: auto;
+  margin: 0 auto 16px;
+}
+
+.icon-frame {
+  display: none;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.logo-text {
+  font-size: 24px;
+  font-weight: 700;
+  color: #4f46e5;
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-group {
+  background-color: #f3f4f6;
+  border-radius: 6px;
+  padding: 4px;
+}
+
+.button-group {
+  margin-top: 8px;
+}
+
+.login-links {
+  margin-top: 24px;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+}
+
+.link-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.link {
+  color: #6cace4;
+  text-decoration: none;
+}
+
+.link.secondary {
+  color: #6b7280;
+}

@@ -1,0 +1,154 @@
+.new-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  font-family: "Palanquin-Regular", Helvetica, sans-serif;
+  background-color: #f9f9f9;
+}
+
+.hero {
+  position: relative;
+  width: 100%;
+  max-width: 1440px;
+  background-color: #fff;
+  padding: 2rem;
+  text-align: center;
+}
+
+.hero-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-bg,
+.hero-topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  margin-left: 2rem;
+}
+
+.logo-text {
+  font-size: 24px;
+  color: #4f46e5;
+  margin-left: 0.5rem;
+}
+
+.hero-nav {
+  display: flex;
+  gap: 1rem;
+  margin-right: 2rem;
+}
+
+.hero-content {
+  margin-top: 6rem;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #4f46e5;
+  margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: #030303;
+  margin-bottom: 2rem;
+}
+
+.browse-courses {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  background-color: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.hero-graphics {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+.hero-graphics img {
+  width: 200px;
+  height: auto;
+  border-radius: 8px;
+}
+
+.courses {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 4rem 0;
+  flex-wrap: wrap;
+}
+
+.course-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  width: 300px;
+  text-align: center;
+}
+
+.course-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.course-title {
+  font-size: 1.25rem;
+  color: #4f46e5;
+  margin-bottom: 0.5rem;
+}
+
+.course-description {
+  font-size: 1rem;
+  color: #030303;
+  margin-bottom: 1rem;
+}
+
+.course-price {
+  font-size: 1.125rem;
+  color: #4f46e5;
+  font-weight: 500;
+}
+
+.footer {
+  width: 100%;
+  background-color: #fff;
+  padding: 2rem 0;
+  text-align: center;
+  border-top: 1px solid #e5e5e5;
+}
+
+.footer-bg {
+  width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}

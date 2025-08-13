@@ -1,20 +1,14 @@
-// Grab the base API URL from Vite env variable.
-// In dev, this comes from .env.development (http://localhost:8080).
-const BASE = import.meta.env.VITE_API_URL
-
-// Small helper to reduce boilerplate and centralize error handling.
-// 'path' is a relative path like "/api/courses".
-// 'init' is the usual fetch init (method, headers, body, etc.)
+// Tiny wrapper around fetch to centralize JSON headers + error handling.
+// With the Vite proxy, can call: api('/api/courses') or api('/actuator/health')
 export async function api(path, init) {
-  const res = await fetch(`${BASE}${path}`, {
-    // Content-Type defaults to JSON for our API calls
+  const res = await fetch(path, {
     headers: { 'Content-Type': 'application/json', ...(init?.headers || {}) },
-    ...init
+    ...init,
   })
-
-  // For non-2xx responses, throw so the caller can handle it in .catch()
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
-
-  // If the API returns no content, return null; else parse JSON.
+  if (!res.ok) {
+    // Surface a readable error to the caller
+    throw new Error(`${res.status} ${res.statusText}`)
+  }
+  // Some endpoints return 204 No Content
   return res.status === 204 ? null : res.json()
 }

@@ -1,0 +1,109 @@
+.courses-page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: "Palanquin", sans-serif;
+}
+
+.courses-page__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.courses-page__header h2 {
+  font-family: "Inter", sans-serif;
+  font-size: 2rem;
+  font-style: italic;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.courses-page__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.courses-page__select {
+  display: flex;
+  align-items: center;
+  background: url("./vector-2.svg") no-repeat center / cover;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #6cace4;
+  position: relative;
+  min-width: 150px;
+  justify-content: space-between;
+}
+
+.courses-page__search input {
+  background: url("./vector.svg") no-repeat center / cover;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #94a3b8;
+  width: 250px;
+}
+
+.courses-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.courses-page__card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease;
+}
+
+.courses-page__card:hover {
+  transform: translateY(-4px);
+}
+
+.courses-page__image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.courses-page__content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.courses-page__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #030303;
+}
+
+.courses-page__description {
+  font-size: 0.875rem;
+  color: #6cace4;
+}
+
+.courses-page__price {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #6cace4;
+  margin-top: auto;
+  align-self: flex-end;
+}
+
+.courses-page__footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
