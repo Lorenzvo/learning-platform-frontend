@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Button } from "../Button/Button";
+import { useNavigate } from "react-router-dom";
 
 const today = new Date().toISOString().slice(0, 10);
 
 export const AdminPaymentsPage = () => {
+  const navigate = useNavigate();
   const [from, setFrom] = useState(today);
   const [to, setTo] = useState(today);
   const [payments, setPayments] = useState([]);
@@ -122,7 +124,10 @@ export const AdminPaymentsPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold text-indigo-700 mb-6">Payments</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-indigo-700">Payments</h1>
+        <Button color="gray" size="small" onClick={() => navigate("/")}>Home</Button>
+      </div>
       <div className="flex gap-4 mb-6 items-end justify-between">
         <div className="flex gap-4 items-end">
           <div>

@@ -16,6 +16,7 @@ import { CartCheckoutPage } from '@/component/Checkout/CartCheckoutPage';
 import { AdminLayout } from "@/component/Admin/AdminLayout";
 import { RequireAdmin } from "@/component/Admin/RequireAdmin";
 import { AdminPaymentsPage } from "@/component/Admin/AdminPaymentsPage";
+import { AdminEnrollmentsPage } from "@/component/Admin/AdminEnrollmentsPage";
 import { AuthProvider } from "@/context/useAuth";
 
 const router = createBrowserRouter([
@@ -65,7 +66,7 @@ const router = createBrowserRouter([
     children: [
       { path: 'payments', element: <AdminPaymentsPage /> },
       { path: 'courses', element: <div className="text-xl text-indigo-700">Admin Courses Page (Coming Soon)</div> },
-      { path: 'enrollments', element: <div className="text-xl text-indigo-700">Admin Enrollments Page (Coming Soon)</div> },
+  { path: 'enrollments', element: <AdminEnrollmentsPage /> },
     ],
   },
 ]);
