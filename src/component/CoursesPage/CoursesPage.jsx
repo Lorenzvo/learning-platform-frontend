@@ -1,54 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../Button/Button";
+import { api } from "../../lib/api.ts";
 import frame from "./frame.svg";
-import group3 from "./group-3.png";
-import group5 from "./group-5.png";
-import group7 from "./group-7.png";
-import group8 from "./group-8.png";
-import group11 from "./group-11.png";
-import group12 from "./group-12.png";
 import "./CoursesPage.css";
-
-const courses = [
-  {
-    title: "Java Basics",
-    description: "Learn the fundamentals of Java programming.",
-    price: "$49",
-    image: group3,
-  },
-  {
-    title: "Full-Stack Web Development",
-    description: "Become a versatile web developer.",
-    price: "$149",
-    image: group5,
-  },
-  {
-    title: "UI/UX Design",
-    description: "Master the art of user interface and experience design.",
-    price: "$79",
-    image: group7,
-  },
-  {
-    title: "AWS Cloud Practitioner",
-    description: "Understand the core services of AWS.",
-    price: "$99",
-    image: group8,
-  },
-  {
-    title: "Data Analytics with Python",
-    description: "Analyze data efficiently using Python tools.",
-    price: "$89",
-    image: group11,
-  },
-  {
-    title: "Cybersecurity Essentials",
-    description: "Learn key cybersecurity principles.",
-    price: "$109",
-    image: group12,
-  },
-];
-
 export const CoursesPage = () => {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(0);
+
+  // Fetch courses from backend
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+      api(`/api/courses?page=${page}${search ? `&q=${encodeURIComponent(search)}` : ""}`)
+        .then(data => {
+          console.log('Courses API response:', data);
+          setCourses(Array.isArray(data?.content) ? data.content : []);
+          setLoading(false);
+        })
+      .catch(err => {
+        setError(err.message || "Failed to load courses");
+        setLoading(false);
+      });
+  }, [page, search]);
+
+  // Handler for search box
+  const handleSearch = e => {
+    e.preventDefault();
+    setPage(1);
+    setSearch(e.target.elements.q.value.trim());
+  };
+
   return (
     <section className="courses-page">
       <header className="courses-page__header">
@@ -63,31 +47,58 @@ export const CoursesPage = () => {
             <img src={frame} alt="Filter icon" />
           </div>
           <div className="courses-page__search">
-            <input
-              type="text"
-              placeholder="Search courses"
-              aria-label="Search courses"
-            />
+            <form onSubmit={handleSearch}>
+              <input
+                type="text"
+                name="q"
+                placeholder="Search courses"
+                aria-label="Search courses"
+                defaultValue={search}
+              />
+              <Button color="primary" size="small" type="submit">Search</Button>
+            </form>
           </div>
         </div>
       </header>
 
-      <div className="courses-page__grid">
-        {courses.map((course) => (
-          <article key={course.title} className="courses-page__card">
-            <img
-              src={course.image}
-              alt={course.title}
-              className="courses-page__image"
-            />
-            <div className="courses-page__content">
-              <h3 className="courses-page__title">{course.title}</h3>
-              <p className="courses-page__description">{course.description}</p>
-              <span className="courses-page__price">{course.price}</span>
-            </div>
-          </article>
-        ))}
-      </div>
+      {/* Loading state */}
+      {loading && (
+        <div className="courses-loading">Loading...</div> // Show skeleton or loading
+      )}
+
+      {/* Error state */}
+      {error && !loading && (
+        <div className="courses-error">{error}</div>
+      )}
+
+      {/* Empty state */}
+      {!loading && !error && courses.length === 0 && (
+        <div className="courses-empty">No courses found.</div>
+      )}
+
+      {/* Courses grid */}
+      {!loading && !error && courses.length > 0 && (
+        <div className="courses-page__grid">
+          {courses.map((course) => (
+            <article key={course.id || course.title} className="courses-page__card">
+              <img
+                src={'https://via.placeholder.com/320x180?text=No+Image'}
+                alt={course.title}
+                className="courses-page__image"
+              />
+              <div className="courses-page__content">
+                <h3 className="courses-page__title">{course.title}</h3>
+                <p className="courses-page__description">{course.description}</p>
+                {typeof course.priceCents === 'number' && (
+                  <span className="courses-page__price">
+                    ${(course.priceCents / 100).toFixed(2)}
+                  </span>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
 
       <div className="courses-page__footer">
         <Button color="primary" size="medium">
