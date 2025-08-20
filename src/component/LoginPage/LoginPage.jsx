@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { post } from "src/lib/api.ts";
 import { Button } from "../Button/Button";
@@ -26,8 +27,14 @@ export const LoginPage = () => {
       const resp = await post("/api/auth/login", { body: { email, password } });
       console.log("Login response:", resp);
       console.log("Login token:", resp.token);
-      // On success, store token and navigate
+      // On success, store token and decode user info
       localStorage.setItem("jwt", resp.token);
+  const decoded = jwtDecode(resp.token);
+      // decoded.role should be "ADMIN" or "USER" (backend sets this)
+      localStorage.setItem("user", JSON.stringify({
+        email: decoded.email,
+        roles: [decoded.role], // ensure array for compatibility
+      }));
       navigate("/");
     } catch (err) {
       setError(err.message || "Login failed");

@@ -21,6 +21,13 @@ export function Shell({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const jwt = localStorage.getItem("jwt");
+  const user = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("user"));
+    } catch {
+      return null;
+    }
+  })();
 
   // Search bar state, prefill from query param if present
   const [search, setSearch] = useState("");
@@ -47,7 +54,9 @@ export function Shell({ children }) {
 
   function logout() {
     localStorage.removeItem("jwt");
+    localStorage.removeItem("user");
     navigate("/");
+    window.location.reload();
   }
 
   return (
@@ -112,57 +121,72 @@ export function Shell({ children }) {
                 Discussion forums coming soon
               </div>
             </div>
-            <div className="relative">
+            {user && user.roles && user.roles.some(r => r.toLowerCase() === "admin") ? (
               <span
-                className="text-base font-medium text-indigo-700 cursor-pointer px-2 py-1 rounded hover:bg-indigo-50 transition"
-                onClick={() => jwt ? navigate("/enrollments") : navigate("/login")}
+                className="text-base font-medium text-indigo-700 cursor-pointer px-2 py-1 rounded transition"
+                onClick={() => navigate("/admin")}
                 role="link"
                 tabIndex={0}
-                aria-label="Go to My Enrollments"
-                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') jwt ? navigate('/enrollments') : navigate('/login'); }}
+                aria-label="Go to Admin Panel"
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') navigate('/admin'); }}
               >
-                My Enrollments
+                Admin Panel
               </span>
-            </div>
+            ) : (
+              <div className="relative">
+                <span
+                  className="text-base font-medium text-indigo-700 cursor-pointer px-2 py-1 rounded hover:bg-indigo-50 transition"
+                  onClick={() => jwt ? navigate("/enrollments") : navigate("/login")}
+                  role="link"
+                  tabIndex={0}
+                  aria-label="Go to My Enrollments"
+                  onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') jwt ? navigate('/enrollments') : navigate('/login'); }}
+                >
+                  My Enrollments
+                </span>
+              </div>
+            )}
           </div>
           {/* Navigation bar: cart icon and login/logout/my courses on right */}
           <nav className="flex gap-4 items-center ml-auto">
-            {/* Cart icon image, with hover preview */}
-            <div
-              className="relative"
-              onMouseEnter={() => setCartPreviewOpen(true)}
-              onMouseLeave={() => setCartPreviewOpen(false)}
-            >
-              <img
-                src={cartBlue}
-                alt="Cart"
-                className={`h-9 w-9 cursor-pointer transition-shadow ${cartPreviewOpen ? "shadow-lg shadow-indigo-400/60" : ""}`}
-                onClick={() => navigate("/cart")}
-                style={{ display: 'inline-block' }}
-                aria-label="Cart"
-              />
-              {cartPreviewOpen && (
-                <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-indigo-100 z-50 p-4 text-sm animate-fadeIn">
-                  <div className="font-semibold text-indigo-700 mb-2">Cart Preview</div>
-                  {jwt ? (
-                    cartItems.length > 0 ? (
-                      <ul className="max-h-40 overflow-y-auto">
-                        {cartItems.map((item, idx) => (
-                          <li key={idx} className="py-1 border-b last:border-b-0 flex justify-between items-center">
-                            <span>{item.title || item.name || `Item ${idx + 1}`}</span>
-                            {item.price && <span className="text-indigo-500 font-medium">${item.price}</span>}
-                          </li>
-                        ))}
-                      </ul>
+            {/* Cart icon image, with hover preview (hidden for admin) */}
+            {!(user && user.roles && user.roles.some(r => r.toLowerCase() === "admin")) && (
+              <div
+                className="relative"
+                onMouseEnter={() => setCartPreviewOpen(true)}
+                onMouseLeave={() => setCartPreviewOpen(false)}
+              >
+                <img
+                  src={cartBlue}
+                  alt="Cart"
+                  className={`h-9 w-9 cursor-pointer transition-shadow ${cartPreviewOpen ? "shadow-lg shadow-indigo-400/60" : ""}`}
+                  onClick={() => navigate("/cart")}
+                  style={{ display: 'inline-block' }}
+                  aria-label="Cart"
+                />
+                {cartPreviewOpen && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-indigo-100 z-50 p-4 text-sm animate-fadeIn">
+                    <div className="font-semibold text-indigo-700 mb-2">Cart Preview</div>
+                    {jwt ? (
+                      cartItems.length > 0 ? (
+                        <ul className="max-h-40 overflow-y-auto">
+                          {cartItems.map((item, idx) => (
+                            <li key={idx} className="py-1 border-b last:border-b-0 flex justify-between items-center">
+                              <span>{item.title || item.name || `Item ${idx + 1}`}</span>
+                              {item.price && <span className="text-indigo-500 font-medium">${item.price}</span>}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <div className="text-gray-500">No items in your cart.</div>
+                      )
                     ) : (
                       <div className="text-gray-500">No items in your cart.</div>
-                    )
-                  ) : (
-                    <div className="text-gray-500">No items in your cart.</div>
-                  )}
-                </div>
-              )}
-            </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
             {jwt ? (
               <>
                 <button className={navLink} onClick={logout}>Logout</button>

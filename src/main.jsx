@@ -13,6 +13,10 @@ import { CartPage } from '@/component/Cart/CartPage';
 import { CourseDetailPage } from '@/component/CourseDetail/CourseDetailPage';
 import { CheckoutPage } from '@/component/Checkout/CheckoutPage';
 import { CartCheckoutPage } from '@/component/Checkout/CartCheckoutPage';
+import { AdminLayout } from "@/component/Admin/AdminLayout";
+import { RequireAdmin } from "@/component/Admin/RequireAdmin";
+import { AdminPaymentsPage } from "@/component/Admin/AdminPaymentsPage";
+import { AuthProvider } from "@/context/useAuth";
 
 const router = createBrowserRouter([
   {
@@ -51,12 +55,27 @@ const router = createBrowserRouter([
     path: '/cart-checkout',
     element: <Shell><CartCheckoutPage /></Shell>,
   },
+  {
+    path: '/admin',
+    element: (
+      <RequireAdmin>
+        <AdminLayout />
+      </RequireAdmin>
+    ),
+    children: [
+      { path: 'payments', element: <AdminPaymentsPage /> },
+      { path: 'courses', element: <div className="text-xl text-indigo-700">Admin Courses Page (Coming Soon)</div> },
+      { path: 'enrollments', element: <div className="text-xl text-indigo-700">Admin Enrollments Page (Coming Soon)</div> },
+    ],
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <CartProvider>
-      <RouterProvider router={router} />
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
