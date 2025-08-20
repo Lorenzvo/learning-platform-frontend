@@ -6,9 +6,12 @@ import { Elements, CardElement, useStripe, useElements } from "@stripe/react-str
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 
+import { useCart } from "../../context/useCart";
+
 function CartCheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
+  const { clear } = useCart();
   const [clientSecret, setClientSecret] = useState("");
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
@@ -41,6 +44,7 @@ function CartCheckoutForm() {
       setProcessing(false);
     } else if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
       setStatus("Payment successful! You are now enrolled.");
+      clear();
       setProcessing(false);
     } else {
       setError("Payment failed or incomplete.");

@@ -53,8 +53,9 @@ export function CartProvider({ children }) {
     refresh();
   };
 
+  const clear = () => setItems([]);
   return (
-    <CartContext.Provider value={{ items, add, remove, refresh, loading, error }}>
+    <CartContext.Provider value={{ items, add, remove, refresh, clear, loading, error }}>
       {children}
     </CartContext.Provider>
   );
