@@ -31,6 +31,7 @@ export const CourseDetailPage = () => {
   const enrolled = enrollments.some(e => e.courseId === course?.id);
 
   const handleAddToCart = async () => {
+    console.log("handleAddToCart fired", course);
     if (!course || !course.id) {
       setToast("Course ID not available");
       setTimeout(() => setToast(""), 2000);
@@ -46,6 +47,7 @@ export const CourseDetailPage = () => {
     }
   };
 
+  console.log("Rendering CourseDetailPage", course, course?.id);
   if (loading) return <div className="course-detail-loading">Loading…</div>;
   if (error) return <div className="course-detail-error">Error: {error}</div>;
   if (!course) return <div className="course-detail-empty">Course not found.</div>;

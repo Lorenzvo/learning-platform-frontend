@@ -34,7 +34,14 @@ export function CartProvider({ children }) {
 
   // Add a course to cart, then refresh
   const add = async (courseId) => {
-    await post("/api/cart/add?courseId=" + courseId);
+    console.log("add() called with courseId:", courseId);
+    try {
+      const response = await post("/api/cart/add?courseId=" + courseId);
+      console.log("POST /api/cart/add response:", response);
+    } catch (err) {
+      console.error("POST /api/cart/add error:", err);
+    }
+    console.log("Calling refresh() after add");
     refresh();
   };
 

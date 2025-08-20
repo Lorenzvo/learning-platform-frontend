@@ -36,11 +36,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/cart',
-    element: <Shell><CartProvider><CartPage /></CartProvider></Shell>,
+    element: <Shell><CartPage /></Shell>,
   },
   {
     path: '/courses/:slug',
-    element: <Shell><CartProvider><CourseDetailPage /></CartProvider></Shell>,
+    element: <Shell><CourseDetailPage /></Shell>,
   },
   {
     path: '/checkout',
@@ -50,6 +50,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <CartProvider>
+      <RouterProvider router={router} />
+    </CartProvider>
   </React.StrictMode>
 );
