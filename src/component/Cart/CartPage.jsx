@@ -1,6 +1,7 @@
 import React from "react";
 import { useCart } from "../../context/useCart";
 import { Button } from "../Button/Button";
+import { useNavigate } from "react-router-dom";
 import "./CartPage.css";
 
 /**
@@ -13,6 +14,7 @@ export const CartPage = () => {
   // Calculate total price (assuming each item has priceCents and title)
   const totalCents = items.reduce((sum, item) => sum + (item.priceCents || 0), 0);
 
+  const navigate = useNavigate();
   return (
     <section className="cart-page">
       <header className="cart-page__header">
@@ -49,7 +51,7 @@ export const CartPage = () => {
       {!loading && !error && items.length > 0 && (
         <div className="cart-page__footer">
           <span className="cart-page__total">Total: ${(totalCents / 100).toFixed(2)}</span>
-          <Button color="primary" size="medium">Checkout</Button>
+          <Button color="primary" size="medium" onClick={() => navigate("/cart-checkout")}>Checkout</Button>
         </div>
       )}
     </section>

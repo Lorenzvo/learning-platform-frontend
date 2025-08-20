@@ -12,6 +12,7 @@ import { CartProvider } from '@/context/CartContext.jsx';
 import { CartPage } from '@/component/Cart/CartPage';
 import { CourseDetailPage } from '@/component/CourseDetail/CourseDetailPage';
 import { CheckoutPage } from '@/component/Checkout/CheckoutPage';
+import { CartCheckoutPage } from '@/component/Checkout/CartCheckoutPage';
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: '/checkout',
     element: <Shell><CheckoutPage /></Shell>,
+  },
+  {
+    path: '/cart-checkout',
+    element: <Shell><CartCheckoutPage /></Shell>,
   },
 ]);
 
