@@ -1,0 +1,41 @@
+.checkout-page {
+  padding: 2rem;
+  max-width: 500px;
+  margin: 0 auto;
+  font-family: "Palanquin", sans-serif;
+}
+
+.checkout-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 2rem;
+}
+
+.checkout-card {
+  padding: 1rem 0;
+  font-size: 1.1rem;
+}
+
+.checkout-error {
+  color: #e53e3e;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.checkout-status {
+  color: #2563eb;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}

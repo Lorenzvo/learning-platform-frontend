@@ -11,6 +11,7 @@ import { SignupPage } from '@/component/LoginPage/SignupPage';
 import { CartProvider } from '@/context/CartContext';
 import { CartPage } from '@/component/Cart/CartPage';
 import { CourseDetailPage } from '@/component/CourseDetail/CourseDetailPage';
+import { CheckoutPage } from '@/component/Checkout/CheckoutPage';
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: '/courses/:slug',
     element: <Shell><CourseDetailPage /></Shell>,
+  },
+  {
+    path: '/checkout',
+    element: <Shell><CheckoutPage /></Shell>,
   },
 ]);
 
