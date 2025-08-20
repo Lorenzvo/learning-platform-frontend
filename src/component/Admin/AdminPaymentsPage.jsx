@@ -12,7 +12,21 @@ export const AdminPaymentsPage = () => {
 
   // Download CSV
   const handleDownload = () => {
-    window.open(`/api/admin/payments/reports/payments.csv?from=${from}&to=${to}`);
+    const token = localStorage.getItem("jwt");
+    fetch(`/api/admin/payments/reports/payments.csv?from=${from}&to=${to}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "payments.csv";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      });
   };
 
   // Fetch payments (if endpoint available)
@@ -20,7 +34,10 @@ export const AdminPaymentsPage = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`/api/admin/payments?from=${from}&to=${to}`);
+      const token = localStorage.getItem("jwt");
+      const res = await fetch(`/api/admin/payments?from=${from}&to=${to}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       if (!res.ok) throw new Error("Failed to fetch payments");
       const data = await res.json();
       setPayments(data);
@@ -34,7 +51,11 @@ export const AdminPaymentsPage = () => {
   // Refund payment
   const handleRefund = async (paymentId) => {
     try {
-      const res = await fetch(`/api/admin/payments/${paymentId}/refund`, { method: "POST" });
+      const token = localStorage.getItem("jwt");
+      const res = await fetch(`/api/admin/payments/${paymentId}/refund`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` }
+      });
       if (!res.ok) throw new Error("Refund failed");
       fetchPayments();
     } catch (e) {
