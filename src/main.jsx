@@ -8,6 +8,8 @@ import { LoginPage } from '@/component/LoginPage/LoginPage';
 import { Shell } from '@/component/Layout/Shell';
 import { EnrollmentsPage } from '@/component/EnrollmentsPage/EnrollmentsPage';
 import { SignupPage } from '@/component/LoginPage/SignupPage';
+import { CartProvider } from '@/context/CartContext';
+import { CartPage } from '@/component/Cart/CartPage';
 
 const router = createBrowserRouter([
   {
@@ -32,7 +34,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/cart',
-    element: <Shell><div>Cart (coming soon)</div></Shell>,
+    element: <Shell><CartProvider><CartPage /></CartProvider></Shell>,
   },
 ]);
 
