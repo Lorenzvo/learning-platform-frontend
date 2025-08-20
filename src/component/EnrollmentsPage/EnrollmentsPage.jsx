@@ -48,6 +48,13 @@ export const EnrollmentsPage = () => {
                 <h3 className="enrollments-page__title">{enrollment.courseTitle || 'Untitled Course'}</h3>
                 <p className="enrollments-page__description">{enrollment.courseDescription || ''}</p>
                 <span className="enrollments-page__status">Status: {enrollment.status || 'Active'}</span>
+                {enrollment.status === 'CANCELED' && (
+                  <a href={`/checkout?courseId=${enrollment.courseId}`} style={{ textDecoration: 'none' }}>
+                    <Button color="primary" size="small" style={{ marginTop: '0.5rem' }}>
+                      Reactivate
+                    </Button>
+                  </a>
+                )}
               </div>
             </article>
           ))}

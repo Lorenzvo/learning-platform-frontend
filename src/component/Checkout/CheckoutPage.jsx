@@ -71,10 +71,25 @@ function CheckoutForm({ courseId }) {
 export const CheckoutPage = () => {
   const [searchParams] = useSearchParams();
   const courseId = searchParams.get("courseId");
+  const [enrollment, setEnrollment] = useState(null);
+  useEffect(() => {
+    if (courseId) {
+      api("/api/enrollments/me").then(data => {
+        const found = Array.isArray(data) ? data.find(e => String(e.courseId) === String(courseId)) : null;
+        setEnrollment(found || null);
+      });
+    }
+  }, [courseId]);
   if (!courseId) return <div className="checkout-error">No course selected for checkout.</div>;
+  // Only show message if enrolled and status is 'active' (case-insensitive)
+  const status = (enrollment?.status || '').toLowerCase();
+  const isActive = status === "active";
   return (
     <section className="checkout-page">
       <h2 className="checkout-title">Checkout</h2>
+      {enrollment && isActive ? (
+        <div className="checkout-info">You are already enrolled in this course.</div>
+      ) : null}
       <Elements stripe={stripePromise}>
         <CheckoutForm courseId={courseId} />
       </Elements>
