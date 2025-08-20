@@ -12,7 +12,7 @@ export const CoursesPage = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [search, setSearch] = useState(searchParams.get("q") || "");
+  const search = searchParams.get("q") || "";
   const [sort, setSort] = useState(searchParams.get("sort") || "");
   const [page, setPage] = useState(Number(searchParams.get("page")) || 0);
   // Level filter state: array of selected levels
@@ -20,14 +20,34 @@ export const CoursesPage = () => {
     const param = searchParams.get("level");
     return param ? param.split(",") : [];
   });
-  const debounceRef = useRef();
+  // Reviews filter state: minimum average rating
+  const [minRating, setMinRating] = useState(searchParams.get("minRating") || "");
+  const [reviewsDropdownOpen, setReviewsDropdownOpen] = useState(false);
+  const reviewsDropdownRef = useRef(null);
+  // Custom dropdown for reviews filter
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (reviewsDropdownRef.current && !reviewsDropdownRef.current.contains(event.target)) {
+        setReviewsDropdownOpen(false);
+      }
+    }
+    if (reviewsDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [reviewsDropdownOpen]);
+  // debounceRef removed (no longer used)
 
   // Fetch courses from backend when query params change
   useEffect(() => {
     setLoading(true);
     setError(null);
-    // Server-side filtering: backend handles search, sort, and level
-    api(`/api/courses?page=${page}${search ? `&q=${encodeURIComponent(search)}` : ""}${sort ? `&sort=${encodeURIComponent(sort)}` : ""}${levels.length ? `&level=${levels.join(",")}` : ""}`)
+    // Server-side filtering: backend handles search, sort, level, and minRating
+    api(`/api/courses?page=${page}${search ? `&q=${encodeURIComponent(search)}` : ""}${sort ? `&sort=${encodeURIComponent(sort)}` : ""}${levels.length ? `&level=${levels.join(",")}` : ""}${minRating ? `&minRating=${minRating}` : ""}`)
       .then(data => {
         setCourses(Array.isArray(data?.content) ? data.content : []);
         setLoading(false);
@@ -36,24 +56,15 @@ export const CoursesPage = () => {
         setError(err.message || "Failed to load courses");
         setLoading(false);
       });
-  }, [page, search, sort, levels]);
+  }, [page, search, sort, levels, minRating]);
 
   // Debounced search input handler
-  const handleSearchInput = (e) => {
-    const value = e.target.value;
-    setSearch(value);
-    // Debounce updating query params
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      setSearchParams({ q: value, sort, page: 1, level: levels.join(",") });
-      setPage(1);
-    }, 400);
-  };
+  // handleSearchInput removed (no longer used)
 
   // Handler for sort dropdown
   const handleSortChange = (e) => {
     setSort(e.target.value);
-    setSearchParams({ q: search, sort: e.target.value, page, level: levels.join(",") });
+    setSearchParams({ q: search, sort: e.target.value, page, level: levels.join(","), minRating });
   };
 
   // Custom dropdown for level filter
@@ -85,7 +96,14 @@ export const CoursesPage = () => {
       newLevels = levels.filter(lvl => lvl !== value);
     }
     setLevels(newLevels);
-    setSearchParams({ q: search, sort, page, level: newLevels.join(",") });
+    setSearchParams({ q: search, sort, page, level: newLevels.join(","), minRating });
+  };
+
+  // Handler for reviews filter dropdown
+  const handleMinRatingSelect = (value) => {
+    setMinRating(value);
+    setReviewsDropdownOpen(false);
+    setSearchParams({ q: search, sort, page, level: levels.join(","), minRating: value });
   };
 
   return (
@@ -106,7 +124,7 @@ export const CoursesPage = () => {
             <img src={frame} alt="Sort icon" />
           </div>
           {/* Filter UI: custom dropdown with checkboxes for course level */}
-          <div className="courses-page__filter" style={{ position: 'relative' }} ref={levelDropdownRef}>
+          <div className="courses-page__filter" style={{ position: 'relative', marginRight: '1rem' }} ref={levelDropdownRef}>
             <button
               type="button"
               className="courses-page__dropdown-btn"
@@ -135,18 +153,52 @@ export const CoursesPage = () => {
               </div>
             )}
           </div>
-          {/* Search UI: debounced, triggers server-side filtering */}
-          <div className="courses-page__search">
-            <input
-              type="text"
-              name="q"
-              placeholder="Search courses"
-              aria-label="Search courses"
-              value={search}
-              onChange={handleSearchInput}
-              style={{ minWidth: 180 }}
-            />
+
+          {/* Ratings filter dropdown button */}
+          <div className="courses-page__filter" style={{ position: 'relative', marginRight: '1rem' }} ref={reviewsDropdownRef}>
+            <button
+              type="button"
+              className="courses-page__dropdown-btn"
+              style={{ padding: '0.5rem 1rem', borderRadius: 4, border: '1px solid #ccc', background: '#fff', cursor: 'pointer', minWidth: 90 }}
+              onClick={() => setReviewsDropdownOpen((open) => !open)}
+            >
+              Ratings &#9662;
+            </button>
+            {reviewsDropdownOpen && (
+              <div
+                className="courses-page__dropdown-menu"
+                style={{ position: 'absolute', top: '110%', left: 0, zIndex: 10, background: '#fff', border: '1px solid #ccc', borderRadius: 4, boxShadow: '0 2px 8px rgba(0,0,0,0.08)', padding: '0.5rem 1rem', minWidth: 140 }}
+              >
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: 4 }}>
+                  <input type="radio" name="minRating" value="2.0" checked={minRating === "2.0"}
+                    onChange={() => handleMinRatingSelect("2.0")} /> 2.0 <span style={{ color: '#f5b50a', fontSize: '1em' }}>★</span>+
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: 4 }}>
+                  <input type="radio" name="minRating" value="3.0" checked={minRating === "3.0"}
+                    onChange={() => handleMinRatingSelect("3.0")} /> 3.0 <span style={{ color: '#f5b50a', fontSize: '1em' }}>★</span>+
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: 4 }}>
+                  <input type="radio" name="minRating" value="4.0" checked={minRating === "4.0"}
+                    onChange={() => handleMinRatingSelect("4.0")} /> 4.0 <span style={{ color: '#f5b50a', fontSize: '1em' }}>★</span>+
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: 8 }}>
+                  <input type="radio" name="minRating" value="4.5" checked={minRating === "4.5"}
+                    onChange={() => handleMinRatingSelect("4.5")} /> 4.5 <span style={{ color: '#f5b50a', fontSize: '1em' }}>★</span>+
+                </label>
+                {minRating && (
+                  <button
+                    type="button"
+                    style={{ width: '100%', padding: '0.4rem', borderRadius: 4, border: '1px solid #ccc', background: '#f5f5f5', color: '#333', cursor: 'pointer', marginTop: 4 }}
+                    onClick={() => { setMinRating(""); setSearchParams({ q: search, sort, page, level: levels.join(",") }); }}
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+            )}
           </div>
+          {/* Search UI: debounced, triggers server-side filtering */}
+          {/* Search bar removed as requested */}
         </div>
       </header>
 
