@@ -165,7 +165,7 @@ export const CoursesPage = () => {
         <div className="courses-empty">No courses found.</div>
       )}
 
-      {/* Courses grid: minimal UI, palette matches existing */}
+      {/* Courses grid: minimal UI, palette matches existing, now with averageRating, instructor, and level */}
       {!loading && !error && courses.length > 0 && (
         <div className="courses-page__grid">
           {courses.map((course) => (
@@ -187,6 +187,24 @@ export const CoursesPage = () => {
                   {typeof course.priceCents === 'number' && (
                     <span className="courses-page__price">
                       ${(course.priceCents / 100).toFixed(2)}
+                    </span>
+                  )}
+                  {/* Display level */}
+                  {course.level && (
+                    <span className="courses-page__level" style={{ display: 'block', fontSize: '0.95em', color: '#555', marginTop: 2 }}>
+                      Level: {course.level}
+                    </span>
+                  )}
+                  {/* Display average rating */}
+                  {typeof course.averageRating === 'number' && (
+                    <span className="courses-page__rating" style={{ display: 'block', fontSize: '0.95em', color: '#555', marginTop: 2 }}>
+                      Rating: {course.averageRating.toFixed(1)} ★
+                    </span>
+                  )}
+                  {/* Display instructor name if available */}
+                  {course.instructor && course.instructor.name && (
+                    <span className="courses-page__instructor" style={{ display: 'block', fontSize: '0.95em', color: '#555', marginTop: 2 }}>
+                      Instructor: {course.instructor.name}
                     </span>
                   )}
                 </div>
