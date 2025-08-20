@@ -1,97 +1,77 @@
-import React from "react";
-import { Button } from "../Button/Button";
-import frame from "./frame.svg";
-import group2 from "./group-2.png";
-import group3 from "./group-3.png";
-import group4 from "./group-4.png";
-import group5 from "./group-5.png";
-import group6 from "./group-6.png";
-import group8 from "./group-8.png";
-import group from "./group.png";
-import image from "./image.png";
-import maskGroup2 from "./mask-group-2.png";
-import maskGroup4 from "./mask-group-4.png";
-import maskGroup7 from "./mask-group-7.png";
-import "./HomePage.css";
+
+import React from 'react';
+import './HomePage.css';
+
+
+const courses = [
+  {
+    id: 1,
+    title: 'Web Development',
+    description: 'Build modern websites and web apps using HTML, CSS, and JavaScript.',
+    image: 'https://undraw.co/api/illustrations/undraw_web_development_re_6b3a.svg'
+  },
+  {
+    id: 2,
+    title: 'Java Spring Boot',
+    description: 'Create robust backend applications with Java and Spring Boot.',
+    image: 'https://undraw.co/api/illustrations/undraw_programming_re_kg9v.svg'
+  },
+  {
+    id: 3,
+    title: 'Digital Marketing',
+    description: 'Master digital marketing strategies to grow your online presence.',
+    image: 'https://undraw.co/api/illustrations/undraw_marketing_re_7f1g.svg'
+  },
+  {
+    id: 4,
+    title: 'Graphic Design',
+    description: 'Learn the principles of graphic design and visual communication.',
+    image: 'https://undraw.co/api/illustrations/undraw_design_re_6yws.svg'
+  },
+  {
+    id: 5,
+    title: 'Linear Algebra',
+    description: 'Understand the foundations of linear algebra for STEM fields.',
+    image: 'https://undraw.co/api/illustrations/undraw_mathematics_re_abe5.svg'
+  },
+  {
+    id: 6,
+    title: 'Cloud Computing',
+    description: 'Explore cloud platforms and learn how to deploy scalable applications.',
+    image: 'https://undraw.co/api/illustrations/undraw_cloud_hosting_7xb1.svg'
+  }
+];
 
 export const HomePage = () => {
   return (
-    <main className="home-page">
-      <section className="hero">
-        <header className="hero-header">
-          <img className="hero-bg" src={group6} alt="Background" />
-          <img className="hero-topbar" src={group8} alt="Topbar" />
-          <img className="logo-icon" src={frame} alt="Logo icon" />
-          <h1 className="logo-text">EdNova</h1>
-          <nav className="hero-nav">
-            <img src={maskGroup7} alt="Nav item" />
-            <img src={maskGroup2} alt="Nav item" />
-            <img src={maskGroup4} alt="Nav item" />
-          </nav>
-        </header>
-
-        <div className="hero-content">
-          <h2 className="hero-title">Learn Anytime, Anywhere</h2>
-          <p className="hero-subtitle">
-            Discover a world of knowledge at your fingertips with Ednova's
-            extensive range of online courses.
-          </p>
-          <Button color="primary" size="medium">
-            Browse Courses
-          </Button>
-        </div>
-
-        <div className="hero-graphics">
-          <img src={image} alt="Course 1" />
-          <img src={group} alt="Overlay 1" />
-          <img src={group4} alt="Course 2" />
-          <img src={group3} alt="Overlay 2" />
-          <img src={group2} alt="Course 3" />
-          <img src={group5} alt="Overlay 3" />
-        </div>
+    <div className="homepage-container">
+      <header className="homepage-header">
+        <h1>EdNova</h1>
+        <nav className="homepage-nav top-right">
+          <button className="nav-btn small">Home</button>
+          <button className="nav-btn small">Courses</button>
+          <button className="nav-btn small">Login</button>
+        </nav>
+      </header>
+      <section className="homepage-hero">
+        <h2 className="homepage-subtitle">Learning starts here</h2>
+        <p className="homepage-description">
+          Welcome to EdNova, your gateway to modern online education. Explore interactive courses, connect with expert instructors, and unlock your potential in a vibrant learning community. Start your journey today!
+        </p>
       </section>
-
-      <section className="course-section">
-        <article className="course-card">
-          <img
-            src={group3}
-            alt="Graphic Design Basics"
-            className="course-image"
-          />
-          <h3 className="course-title">Graphic Design Basics</h3>
-          <p className="course-description">
-            Learn the fundamentals of graphic design with our beginner-friendly
-            course.
-          </p>
-          <p className="course-price">$49.99</p>
-        </article>
-
-        <article className="course-card">
-          <img
-            src={group4}
-            alt="Digital Marketing Mastery"
-            className="course-image"
-          />
-          <h3 className="course-title">Digital Marketing Mastery</h3>
-          <p className="course-description">
-            Master digital marketing techniques and grow your online presence.
-          </p>
-          <p className="course-price">$59.99</p>
-        </article>
-
-        <article className="course-card">
-          <img
-            src={group2}
-            alt="Web Development Advanced"
-            className="course-image"
-          />
-          <h3 className="course-title">Web Development Advanced</h3>
-          <p className="course-description">
-            Enhance your web development skills with our advanced course.
-          </p>
-          <p className="course-price">$69.99</p>
-        </article>
-      </section>
-    </main>
+      <main className="homepage-main">
+        <h2 className="courses-title">Featured Courses</h2>
+        <div className="courses-grid six-grid">
+          {courses.map(course => (
+            <div key={course.id} className="course-card large">
+              <img src={course.image} alt={course.title} className="course-image large" />
+              <h3>{course.title}</h3>
+              <p>{course.description}</p>
+              <button className="course-btn">View Course</button>
+            </div>
+          ))}
+        </div>
+      </main>
+    </div>
   );
 };

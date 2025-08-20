@@ -1,10 +1,200 @@
-.new-screen {
+.homepage-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
-  font-family: "Palanquin-Regular", Helvetica, sans-serif;
-  background-color: #f9f9f9;
+  min-height: 100vh;
+  background: #f6f8fa;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.homepage-header {
+  width: 100%;
+  padding: 2rem 0 1rem 0;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.homepage-header h1 {
+  margin: 0 auto;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+.homepage-nav {
+  display: flex;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.homepage-nav.top-right {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  margin: 0;
+}
+
+.nav-btn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.nav-btn.small {
+  padding: 0.4rem 1rem;
+  font-size: 0.95rem;
+  border-radius: 16px;
+}
+
+.nav-btn:hover {
+  background: #1e40af;
+}
+
+.homepage-main {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.courses-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 2.5rem;
+  color: #2563eb;
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.5rem;
+  width: 100%;
+}
+
+.courses-grid.large {
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 3rem;
+}
+
+.courses-grid.six-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 3rem;
+  width: 100%;
+  margin-bottom: 3rem;
+}
+
+.course-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.2s;
+  min-height: 420px;
+}
+
+.course-card.large {
+  min-width: 280px;
+  max-width: 340px;
+  min-height: 360px;
+  max-height: 380px;
+  padding: 2.2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  border-radius: 18px;
+  background: #fff;
+}
+
+.course-card:hover {
+  box-shadow: 0 12px 32px rgba(37,99,235,0.14);
+}
+
+.course-card h3 {
+  margin: 1.5rem 0 0.75rem 0;
+  font-size: 1.45rem;
+  color: #2d3748;
+}
+
+.course-card.large h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #2563eb;
+  margin: 0.5rem 0 0.3rem 0;
+  text-align: center;
+}
+
+.course-card p {
+  margin: 0 0 2rem 0;
+  color: #4b5563;
+  text-align: center;
+  font-size: 1.08rem;
+}
+
+.course-card.large p {
+  font-size: 0.98rem;
+  color: #4b5563;
+  margin: 0 0 1.2rem 0;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.course-image {
+  width: 100%;
+  max-width: 320px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(37,99,235,0.08);
+}
+
+.course-image.large {
+  width: 85%;
+  max-width: 180px;
+  height: 110px;
+  border-radius: 14px;
+  margin-bottom: 1.3rem;
+  object-fit: contain;
+  background: #f6f8fa;
+  box-shadow: 0 2px 12px rgba(37,99,235,0.08);
+}
+
+.course-btn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 0.6rem 1.7rem;
+  font-size: 1.05rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.course-btn:hover {
+  background: #1e40af;
 }
 
 .hero {
@@ -12,7 +202,8 @@
   width: 100%;
   max-width: 1440px;
   background-color: #fff;
-  padding: 2rem;
+  overflow: hidden;
+  padding: 2rem 1rem;
   text-align: center;
 }
 
@@ -21,21 +212,30 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 1rem 2rem;
 }
 
-.hero-bg,
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: -1;
+}
+
 .hero-topbar {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
+  height: auto;
   z-index: -1;
 }
 
 .logo-icon {
   width: 36px;
   height: 36px;
-  margin-left: 2rem;
 }
 
 .logo-text {
@@ -47,11 +247,17 @@
 .hero-nav {
   display: flex;
   gap: 1rem;
-  margin-right: 2rem;
+}
+
+.hero-nav img {
+  height: 24px;
 }
 
 .hero-content {
-  margin-top: 6rem;
+  margin-top: 4rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hero-title {
@@ -67,44 +273,42 @@
   margin-bottom: 2rem;
 }
 
-.browse-courses {
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
-  background-color: #4f46e5;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
 .hero-graphics {
   display: flex;
   justify-content: center;
   gap: 2rem;
-  margin-top: 4rem;
+  margin-top: 3rem;
+  flex-wrap: wrap;
 }
 
 .hero-graphics img {
-  width: 200px;
+  max-width: 300px;
   height: auto;
   border-radius: 8px;
 }
 
-.courses {
+.course-section {
   display: flex;
   justify-content: center;
   gap: 2rem;
-  margin: 4rem 0;
   flex-wrap: wrap;
+  padding: 4rem 1rem;
+  background-color: #fff;
+  width: 100%;
 }
 
 .course-card {
-  background-color: #fff;
+  background-color: #fefefe;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   padding: 1.5rem;
-  width: 300px;
+  max-width: 320px;
   text-align: center;
+  transition: transform 0.2s ease-in-out;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
 }
 
 .course-image {
@@ -132,23 +336,24 @@
   font-weight: 500;
 }
 
-.footer {
+.homepage-hero {
   width: 100%;
-  background-color: #fff;
-  padding: 2rem 0;
+  max-width: 700px;
+  margin: 2.5rem auto 2.5rem auto;
   text-align: center;
-  border-top: 1px solid #e5e5e5;
 }
 
-.footer-bg {
-  width: 100%;
-  height: auto;
+.homepage-subtitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2563eb;
   margin-bottom: 1rem;
 }
 
-.footer-links {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
+.homepage-description {
+  font-size: 1.15rem;
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
 }
+
