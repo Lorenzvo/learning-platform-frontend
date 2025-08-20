@@ -8,7 +8,7 @@ import { LoginPage } from '@/component/LoginPage/LoginPage';
 import { Shell } from '@/component/Layout/Shell';
 import { EnrollmentsPage } from '@/component/EnrollmentsPage/EnrollmentsPage';
 import { SignupPage } from '@/component/LoginPage/SignupPage';
-import { CartProvider } from '@/context/CartContext';
+import { CartProvider } from '@/context/CartContext.jsx';
 import { CartPage } from '@/component/Cart/CartPage';
 import { CourseDetailPage } from '@/component/CourseDetail/CourseDetailPage';
 import { CheckoutPage } from '@/component/Checkout/CheckoutPage';
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/courses/:slug',
-    element: <Shell><CourseDetailPage /></Shell>,
+    element: <Shell><CartProvider><CourseDetailPage /></CartProvider></Shell>,
   },
   {
     path: '/checkout',

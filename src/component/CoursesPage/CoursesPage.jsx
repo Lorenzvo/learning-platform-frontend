@@ -3,6 +3,7 @@ import { Button } from "../Button/Button";
 import { api } from "../../lib/api.ts";
 import frame from "./frame.svg";
 import "./CoursesPage.css";
+import { Link } from "react-router-dom";
 export const CoursesPage = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -80,22 +81,29 @@ export const CoursesPage = () => {
       {!loading && !error && courses.length > 0 && (
         <div className="courses-page__grid">
           {courses.map((course) => (
-            <article key={course.id || course.title} className="courses-page__card">
-              <img
-                src={'https://via.placeholder.com/320x180?text=No+Image'}
-                alt={course.title}
-                className="courses-page__image"
-              />
-              <div className="courses-page__content">
-                <h3 className="courses-page__title">{course.title}</h3>
-                <p className="courses-page__description">{course.description}</p>
-                {typeof course.priceCents === 'number' && (
-                  <span className="courses-page__price">
-                    ${(course.priceCents / 100).toFixed(2)}
-                  </span>
-                )}
-              </div>
-            </article>
+            <Link
+              key={course.slug || course.title}
+              to={`/courses/${course.slug}`}
+              className="courses-page__card-link"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <article className="courses-page__card">
+                <img
+                  src={'https://via.placeholder.com/320x180?text=No+Image'}
+                  alt={course.title}
+                  className="courses-page__image"
+                />
+                <div className="courses-page__content">
+                  <h3 className="courses-page__title">{course.title}</h3>
+                  <p className="courses-page__description">{course.description}</p>
+                  {typeof course.priceCents === 'number' && (
+                    <span className="courses-page__price">
+                      ${(course.priceCents / 100).toFixed(2)}
+                    </span>
+                  )}
+                </div>
+              </article>
+            </Link>
           ))}
         </div>
       )}

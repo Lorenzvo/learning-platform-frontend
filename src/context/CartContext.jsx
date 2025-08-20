@@ -17,6 +17,7 @@ export function CartProvider({ children }) {
     setLoading(true);
     api("/api/cart")
       .then(data => {
+        console.log("Cart API response:", data);
         setItems(Array.isArray(data) ? data : []);
         setError(null);
         setLoading(false);

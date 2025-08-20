@@ -1,5 +1,5 @@
 import React from "react";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "../../context/useCart";
 import { Button } from "../Button/Button";
 import "./CartPage.css";
 
@@ -26,7 +26,15 @@ export const CartPage = () => {
       {!loading && !error && items.length > 0 && (
         <div className="cart-page__grid">
           {items.map(item => (
-            <article key={item.id || item.courseId} className="cart-page__card">
+            <article key={item.courseId} className="cart-page__card">
+              {item.thumbnailUrl && (
+                <img
+                  src={item.thumbnailUrl}
+                  alt={item.title}
+                  className="cart-page__image"
+                  style={{ width: "120px", borderRadius: "8px", marginRight: "1rem" }}
+                />
+              )}
               <div className="cart-page__content">
                 <h3 className="cart-page__title">{item.title || `Course #${item.courseId}`}</h3>
                 <span className="cart-page__price">${(item.priceCents / 100).toFixed(2)}</span>
