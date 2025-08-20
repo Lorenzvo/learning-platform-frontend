@@ -45,14 +45,7 @@ const courses = [
 export const HomePage = () => {
   return (
     <div className="homepage-container">
-      <header className="homepage-header">
-        <h1>EdNova</h1>
-        <nav className="homepage-nav top-right">
-          <button className="nav-btn small">Home</button>
-          <button className="nav-btn small">Courses</button>
-          <button className="nav-btn small">Login</button>
-        </nav>
-      </header>
+      {/* Shell layout provides header/nav. Only show hero and main content here. */}
       <section className="homepage-hero">
         <h2 className="homepage-subtitle">Learning starts here</h2>
         <p className="homepage-description">
