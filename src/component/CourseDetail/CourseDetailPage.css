@@ -1,0 +1,50 @@
+.course-detail-page {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: "Palanquin", sans-serif;
+}
+
+.course-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.course-detail-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #030303;
+}
+
+.course-detail-price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.course-detail-description {
+  font-size: 1rem;
+  color: #6cace4;
+  margin-bottom: 2rem;
+}
+
+.course-detail-toast {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #2563eb;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.course-detail-loading,
+.course-detail-error,
+.course-detail-empty {
+  text-align: center;
+  margin: 2rem 0;
+  font-size: 1.2rem;
+  color: #6cace4;
+}

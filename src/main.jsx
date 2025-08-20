@@ -10,6 +10,7 @@ import { EnrollmentsPage } from '@/component/EnrollmentsPage/EnrollmentsPage';
 import { SignupPage } from '@/component/LoginPage/SignupPage';
 import { CartProvider } from '@/context/CartContext';
 import { CartPage } from '@/component/Cart/CartPage';
+import { CourseDetailPage } from '@/component/CourseDetail/CourseDetailPage';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
   {
     path: '/cart',
     element: <Shell><CartProvider><CartPage /></CartProvider></Shell>,
+  },
+  {
+    path: '/courses/:slug',
+    element: <Shell><CourseDetailPage /></Shell>,
   },
 ]);
 

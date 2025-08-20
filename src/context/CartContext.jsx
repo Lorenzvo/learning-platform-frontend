@@ -1,17 +1,12 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { api, post, del } from "../lib/api.ts";
+import { CartContext } from "./CartContext";
 
 /**
- * CartContext provides a server-source-of-truth for cart items.
+ * CartProvider provides a server-source-of-truth for cart items.
  * All cart operations (add, remove, refresh) interact with the backend.
  * Client cache is only used for UI state; backend is always authoritative.
  */
-const CartContext = createContext();
-
-export function useCart() {
-  return useContext(CartContext);
-}
-
 export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
