@@ -1,0 +1,82 @@
+.enrollments-page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: "Palanquin", sans-serif;
+}
+
+.enrollments-page__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.enrollments-page__header h2 {
+  font-family: "Inter", sans-serif;
+  font-size: 2rem;
+  font-style: italic;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.enrollments-loading,
+.enrollments-error,
+.enrollments-empty {
+  text-align: center;
+  margin: 2rem 0;
+  font-size: 1.2rem;
+  color: #6cace4;
+}
+
+.enrollments-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.enrollments-page__card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease;
+}
+
+.enrollments-page__card:hover {
+  transform: translateY(-4px);
+}
+
+.enrollments-page__image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.enrollments-page__content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.enrollments-page__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #030303;
+}
+
+.enrollments-page__description {
+  font-size: 0.875rem;
+  color: #6cace4;
+}
+
+.enrollments-page__status {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #6cace4;
+  margin-top: auto;
+  align-self: flex-end;
+}

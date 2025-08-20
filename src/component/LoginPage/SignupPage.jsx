@@ -9,28 +9,30 @@ import group from "./group.png";
 import image from "./image.png";
 import "./LoginPage.css";
 
-export const LoginPage = () => {
-  // Accessibility: use label and aria attributes for form fields
+export const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // POST to backend login endpoint (AuthController: /api/auth/login)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
     setLoading(true);
     try {
-      const resp = await post("/api/auth/login", { body: { email, password } });
-      console.log("Login response:", resp);
-      console.log("Login token:", resp.token);
-      // On success, store token and navigate
-      localStorage.setItem("jwt", resp.token);
-      navigate("/");
+      await post("/api/auth/signup", { body: { email, password } });
+      setSuccess("Account created! You can now log in.");
+      setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
-      setError(err.message || "Login failed");
+      setError(err.message || "Signup failed");
     } finally {
       setLoading(false);
     }
@@ -48,10 +50,8 @@ export const LoginPage = () => {
             <h1 className="logo-text">EdNova</h1>
           </div>
         </header>
-
-        <form className="login-form" aria-label="Login Form" onSubmit={handleSubmit}>
+        <form className="login-form" aria-label="Signup Form" onSubmit={handleSubmit}>
           <div className="input-group">
-            {/* Accessibility: label and aria-label for email */}
             <label htmlFor="email" className="sr-only">Email</label>
             <TextField
               id="email"
@@ -65,7 +65,6 @@ export const LoginPage = () => {
             />
           </div>
           <div className="input-group">
-            {/* Accessibility: label and aria-label for password */}
             <label htmlFor="password" className="sr-only">Password</label>
             <TextField
               id="password"
@@ -78,32 +77,34 @@ export const LoginPage = () => {
               required
             />
           </div>
+          <div className="input-group">
+            <label htmlFor="confirmPassword" className="sr-only">Confirm Password</label>
+            <TextField
+              id="confirmPassword"
+              type="password"
+              placeholder="Confirm Password"
+              variant="outlined"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              aria-label="Confirm Password"
+              required
+            />
+          </div>
           {error && (
             <div className="p-2 text-red-700 text-sm" role="alert">{error}</div>
           )}
+          {success && (
+            <div className="p-2 text-green-700 text-sm" role="alert">{success}</div>
+          )}
           <div className="button-group">
             <Button color="primary" size="medium" type="submit" disabled={loading} aria-busy={loading}>
-              {loading ? "Signing In..." : "Sign In"}
+              {loading ? "Signing Up..." : "Sign Up"}
             </Button>
           </div>
         </form>
-
         <nav className="login-links" aria-label="Secondary Navigation">
           <div className="link-row">
-            <a href="/signup" className="link">
-              Create Account
-            </a>
-            <a href="#" className="link secondary">
-              Forgot Password?
-            </a>
-          </div>
-          <div className="link-row">
-            <a href="#" className="link">
-              Home
-            </a>
-            <a href="#" className="link">
-              Courses
-            </a>
+            <a href="/login" className="link">Already have an account?</a>
           </div>
         </nav>
       </section>

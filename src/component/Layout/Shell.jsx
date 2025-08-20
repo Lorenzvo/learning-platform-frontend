@@ -165,7 +165,6 @@ export function Shell({ children }) {
             </div>
             {jwt ? (
               <>
-                <button className={navLink} onClick={() => navigate("/my-courses")}>My Courses</button>
                 <button className={navLink} onClick={logout}>Logout</button>
               </>
             ) : (

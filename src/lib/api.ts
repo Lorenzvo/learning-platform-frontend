@@ -38,6 +38,11 @@ export async function api(path: string, options: any = {}) {
     headers: buildHeaders(options),
     ...options,
   };
+  if (opts.headers["Authorization"]) {
+    console.log("API request Authorization header:", opts.headers["Authorization"]);
+  } else {
+    console.log("API request: No Authorization header sent");
+  }
   if (opts.body && typeof opts.body !== "string") {
     opts.body = JSON.stringify(opts.body);
   }

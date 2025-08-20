@@ -6,8 +6,14 @@ import { HomePage } from '@/component/HomePage/HomePage';
 import { CoursesPage } from '@/component/CoursesPage/CoursesPage';
 import { LoginPage } from '@/component/LoginPage/LoginPage';
 import { Shell } from '@/component/Layout/Shell';
+import { EnrollmentsPage } from '@/component/EnrollmentsPage/EnrollmentsPage';
+import { SignupPage } from '@/component/LoginPage/SignupPage';
 
 const router = createBrowserRouter([
+  {
+    path: '/enrollments',
+    element: <Shell><EnrollmentsPage /></Shell>,
+  },
   {
     path: '/',
     element: <Shell><HomePage /></Shell>,
@@ -21,12 +27,12 @@ const router = createBrowserRouter([
     element: <Shell><LoginPage /></Shell>,
   },
   {
-    path: '/cart',
-    element: <Shell><div>Cart (coming soon)</div></Shell>,
+    path: '/signup',
+    element: <Shell><SignupPage /></Shell>,
   },
   {
-    path: '/my-courses',
-    element: <Shell><div>My Courses (coming soon)</div></Shell>,
+    path: '/cart',
+    element: <Shell><div>Cart (coming soon)</div></Shell>,
   },
 ]);
 
