@@ -38,11 +38,13 @@ export function CartProvider({ children }) {
     try {
       const response = await post("/api/cart/add?courseId=" + courseId);
       console.log("POST /api/cart/add response:", response);
+      refresh();
+      return response;
     } catch (err) {
       console.error("POST /api/cart/add error:", err);
+      refresh();
+      throw err;
     }
-    console.log("Calling refresh() after add");
-    refresh();
   };
 
   // Remove a course from cart, then refresh

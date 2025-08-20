@@ -40,11 +40,10 @@ export const CourseDetailPage = () => {
     try {
       await add(course.id);
       setToast("Added to cart");
-      setTimeout(() => setToast(""), 2000);
     } catch (err) {
       setToast(err.message || "Failed to add to cart");
-      setTimeout(() => setToast(""), 2000);
     }
+    setTimeout(() => setToast(""), 2000);
   };
 
   console.log("Rendering CourseDetailPage", course, course?.id);
