@@ -53,14 +53,14 @@ export function Shell({ children }) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header with app name and navigation/search bar */}
-      <header className="bg-white shadow flex items-center justify-between px-6 py-4">
+      <header className="bg-white shadow px-6 py-4">
         <div className="flex items-center gap-6 w-full">
           {/* EdNova title with frame.svg as a cap over 'Ed' */}
           <div className="relative flex items-center" style={{ marginLeft: '-2.5rem' }}>
             <img
               src={frameSvg}
               alt="Ed cap"
-              className="absolute left-9 -top-5 h-8 w-8"
+              className="absolute left-9.5 -top-3 h-6 w-6"
               style={{ zIndex: 1 }}
             />
             <span
@@ -88,7 +88,7 @@ export function Shell({ children }) {
               </span>
               <input
                 type="text"
-                className="w-96 pl-10 pr-3 py-2 rounded-full border border-indigo-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 text-gray-900 bg-white placeholder-indigo-400 text-lg"
+                className="w-[28.5rem] pl-10 pr-3 py-2 rounded-full border border-indigo-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 text-gray-900 bg-white placeholder-indigo-400 text-lg"
                 placeholder="Search for courses"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
@@ -98,6 +98,33 @@ export function Shell({ children }) {
               />
             </div>
           </form>
+          {/* Middle bar: About Us, Community, My Enrollments */}
+          <div className="flex items-center gap-8 ml-12">
+            <div className="relative group">
+              <span className="text-base font-medium text-gray-700 cursor-pointer px-2 py-1 rounded hover:bg-indigo-50 transition">About Us</span>
+              <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg text-xs text-gray-600 px-2 py-1 z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150">
+                Coming soon.
+              </div>
+            </div>
+            <div className="relative group">
+              <span className="text-base font-medium text-gray-700 cursor-pointer px-2 py-1 rounded hover:bg-indigo-50 transition">Community</span>
+              <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg text-xs text-gray-600 px-2 py-1 z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150">
+                Discussion forums coming soon
+              </div>
+            </div>
+            <div className="relative">
+              <span
+                className="text-base font-medium text-indigo-700 cursor-pointer px-2 py-1 rounded hover:bg-indigo-50 transition"
+                onClick={() => jwt ? navigate("/enrollments") : navigate("/login")}
+                role="link"
+                tabIndex={0}
+                aria-label="Go to My Enrollments"
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') jwt ? navigate('/enrollments') : navigate('/login'); }}
+              >
+                My Enrollments
+              </span>
+            </div>
+          </div>
           {/* Navigation bar: cart icon and login/logout/my courses on right */}
           <nav className="flex gap-4 items-center ml-auto">
             {/* Cart icon image, with hover preview */}

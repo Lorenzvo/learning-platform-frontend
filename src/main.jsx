@@ -1,15 +1,12 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import './index.css'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import './index.css';
+import { HomePage } from '@/component/HomePage/HomePage';
+import { CoursesPage } from '@/component/CoursesPage/CoursesPage';
+import { LoginPage } from '@/component/LoginPage/LoginPage';
+import { Shell } from '@/component/Layout/Shell';
 
-// Import pages
-import { HomePage } from '@/component/HomePage/HomePage'
-import { CoursesPage } from '@/component/CoursesPage/CoursesPage'
-import { LoginPage } from '@/component/LoginPage/LoginPage'
-import { Shell } from '@/component/Layout/Shell'
-
-// Define routes, all wrapped in Shell layout
 const router = createBrowserRouter([
   {
     path: '/',
@@ -31,10 +28,10 @@ const router = createBrowserRouter([
     path: '/my-courses',
     element: <Shell><div>My Courses (coming soon)</div></Shell>,
   },
-])
+]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <RouterProvider router={router} />
   </React.StrictMode>
-)
+);

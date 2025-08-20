@@ -45,12 +45,25 @@ const courses = [
 export const HomePage = () => {
   return (
     <div className="homepage-container">
-      {/* Shell layout provides header/nav. Only show hero and main content here. */}
-      <section className="homepage-hero">
-        <h2 className="homepage-subtitle">Learning starts here</h2>
-        <p className="homepage-description">
-          Welcome to EdNova, your gateway to modern online education. Explore interactive courses, connect with expert instructors, and unlock your potential in a vibrant learning community. Start your journey today!
-        </p>
+      {/* Stack Overflow-style blue banner hero */}
+      <section
+        className="relative left-1 right-0 -mx-[50vw] w-screen h-[260px] md:h-[380px] flex items-center !mt-[-32px] bg-cover bg-center bg-no-repeat"
+        aria-label="Blue background banner for EdNova homepage"
+        style={{
+          backgroundImage: `url(/src/assets/bluebackground.png)`
+        }}
+      >
+        {/* Overlay for contrast */}
+        <div className="absolute inset-0 bg-blue-900 bg-opacity-60 pointer-events-none" />
+        {/* Content container, left-aligned */}
+        <div className="relative z-10 max-w-5xl pl-2 md:pl-8 flex flex-col justify-center h-full text-left">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4" tabIndex={0}>
+            Learning starts here
+          </h1>
+          <p className="text-white text-lg md:text-xl max-w-xl mt-2 md:mt-4" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.18)' }}>
+            Welcome to EdNova, your gateway to modern online education. Explore interactive courses, connect with expert instructors, and unlock your potential in a vibrant learning community. Start your journey today!
+          </p>
+        </div>
       </section>
       <main className="homepage-main">
         <h2 className="courses-title">Featured Courses</h2>
@@ -58,13 +71,13 @@ export const HomePage = () => {
           {courses.map(course => (
             <div key={course.id} className="course-card large">
               <img src={course.image} alt={course.title} className="course-image large" />
-              <h3>{course.title}</h3>
-              <p>{course.description}</p>
-              <button className="course-btn">View Course</button>
+              <h3 className="course-title large">{course.title}</h3>
+              <p className="course-description large">{course.description}</p>
             </div>
           ))}
         </div>
       </main>
     </div>
   );
-};
+}
+        
