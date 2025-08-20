@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useCart } from "../../context/useCart";
 import { Button } from "../Button/Button";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/useAuthHook";
 import "./CartPage.css";
 
 /**
@@ -10,11 +11,20 @@ import "./CartPage.css";
  */
 export const CartPage = () => {
   const { items, remove, loading, error } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login", { replace: true });
+    }
+  }, [user, navigate]);
 
   // Calculate total price (assuming each item has priceCents and title)
   const totalCents = items.reduce((sum, item) => sum + (item.priceCents || 0), 0);
 
-  const navigate = useNavigate();
+  if (!user) return null;
+
   return (
     <section className="cart-page">
       <header className="cart-page__header">

@@ -46,12 +46,43 @@ export async function api(path: string, options: any = {}) {
   if (opts.body && typeof opts.body !== "string") {
     opts.body = JSON.stringify(opts.body);
   }
-  const res = await fetch(url, opts);
+  let res = await fetch(url, opts);
   let data;
   try {
     data = await res.json();
   } catch {
     data = undefined;
+  }
+  // If token expired (401), try to refresh only if JWT is present
+  const jwt = localStorage.getItem("jwt");
+  if (res.status === 401 && path !== "/api/auth/refresh" && jwt) {
+    try {
+      const refreshRes = await fetch(API_BASE + "/api/auth/refresh", { method: "POST", credentials: "include" });
+      if (refreshRes.ok) {
+        const refreshData = await refreshRes.json();
+        if (refreshData.accessToken) {
+          localStorage.setItem("jwt", refreshData.accessToken);
+          opts.headers["Authorization"] = `Bearer ${refreshData.accessToken}`;
+          res = await fetch(url, opts);
+          try {
+            data = await res.json();
+          } catch {
+            data = undefined;
+          }
+        }
+      } else {
+        // Refresh failed, log out
+        localStorage.removeItem("jwt");
+        localStorage.removeItem("user");
+        window.location.href = "/login";
+        throw new Error("Session expired. Please log in again.");
+      }
+    } catch {
+      localStorage.removeItem("jwt");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+      throw new Error("Session expired. Please log in again.");
+    }
   }
   if (!res.ok) {
     const err: any = new Error((data && data.message) || res.statusText);
@@ -59,7 +90,7 @@ export async function api(path: string, options: any = {}) {
     err.message = (data && data.message) || res.statusText;
     throw err;
   }
-  return data;
+  return data; // Fixed return statement
 }
 
 export function get(path: string, options: any = {}) {
