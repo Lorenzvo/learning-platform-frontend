@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../../lib/api.ts";
 import { Button } from "../Button/Button";
+import "./CartCheckoutPage.css";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
@@ -52,14 +53,17 @@ function CartCheckoutForm() {
     }
   };
 
-  if (!clientSecret) return <div>Loading checkout...</div>;
+  if (!clientSecret) return <div className="cart-checkout-form">Loading checkout...</div>;
 
   return (
     <form onSubmit={handleSubmit} className="cart-checkout-form">
-      <CardElement />
+      <label className="cart-checkout-label" htmlFor="card-element">Card Information</label>
+      <div className="StripeElement">
+        <CardElement id="card-element" options={{ style: { base: { fontSize: '1.1rem', fontFamily: 'Inter, Roboto, sans-serif', color: '#374151' } } }} />
+      </div>
       {error && <div className="cart-checkout-error">{error}</div>}
       {status && <div className="cart-checkout-status">{status}</div>}
-      <Button color="primary" size="medium" type="submit" disabled={processing || !stripe}>
+      <Button className="cart-checkout-button" color="primary" size="large" type="submit" disabled={processing || !stripe}>
         {processing ? "Processing..." : "Pay & Enroll"}
       </Button>
     </form>
@@ -68,7 +72,7 @@ function CartCheckoutForm() {
 
 export const CartCheckoutPage = () => (
   <section className="cart-checkout-page">
-    <h2>Cart Checkout</h2>
+    <h2 className="cart-checkout-title">Cart Checkout</h2>
     <Elements stripe={stripePromise}>
       <CartCheckoutForm />
     </Elements>

@@ -23,6 +23,7 @@ export const CourseDetailPage = () => {
   const [toast, setToast] = useState("");
   const [enrollments, setEnrollments] = useState([]);
   const [redirecting, setRedirecting] = useState(false);
+  const [openModuleIdx, setOpenModuleIdx] = useState(null);
   const { add } = useCart();
 
   useEffect(() => {
@@ -83,24 +84,32 @@ export const CourseDetailPage = () => {
   if (error) return <div className="course-detail-error">Error: {error}</div>;
   if (!course) return <div className="course-detail-empty">Course not found.</div>;
   console.log("Thumbnail URL:", course && course.thumbnailUrl);
+  // ...existing code...
+
   return (
     <section className="course-detail-page">
-      <header className="course-detail-header">
+      <header className="course-detail-header" style={{display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '2rem'}}>
         <img
           src={isValidUrl(course.thumbnailUrl) ? course.thumbnailUrl : '/vite.svg'}
           alt={course.title}
-          style={{height: '120px', borderRadius: '8px', marginRight: '2rem'}}
+          style={{width: '180px', height: '120px', objectFit: 'cover', borderRadius: '12px', boxShadow: '0 2px 12px rgba(80,112,255,0.10)'}}
         />
-        <div>
-          <h2 className="course-detail-title">{course.title}</h2>
-          <span className="course-detail-price">${(course.price / 100).toFixed(2)}</span>
-          <span className="course-detail-level">{course.level}</span>
+        <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+          <h2 className="course-detail-title" style={{fontSize: '2rem', fontWeight: 700, color: '#4f46e5', marginBottom: '0.5rem'}}>{course.title}</h2>
+          {course.instructor && (
+            <div className="course-detail-instructor" style={{fontSize: '1.15rem', color: '#374151', marginBottom: '0.3rem', fontWeight: 500}}>
+              Instructor: {course.instructor.name}
+            </div>
+          )}
+          <div style={{display: 'flex', alignItems: 'center', gap: '0.7rem'}}>
+            <span className="course-detail-level" style={{fontSize: '1.05rem', color: '#6b7280', background: '#e0e7ff', borderRadius: '6px', padding: '3px 14px'}}>{course.level}</span>
+            {!enrolled && (
+              <span className="course-detail-price" style={{fontSize: '1.15rem', fontWeight: 600, color: '#2563eb', marginLeft: '0.7rem'}}>${(course.price / 100).toFixed(2)}</span>
+            )}
+          </div>
         </div>
       </header>
-      <div className="course-detail-description">{course.longDesc}</div>
-      {course.instructor && (
-        <div className="course-detail-instructor">Instructor: {course.instructor.name}</div>
-      )}
+  <div className="course-detail-description" style={{color: '#111', fontSize: '1.08rem', marginBottom: '2rem', lineHeight: 1.7}}>{course.longDesc}</div>
       <div className="course-detail-reviews">
         {course.reviewCount > 0 ? (
           <span>Reviews: {course.avgRating.toFixed(1)} / 5 ({course.reviewCount})</span>
@@ -110,25 +119,35 @@ export const CourseDetailPage = () => {
       </div>
       {/* Modules */}
       <div className="course-detail-modules">
-        <h3>Modules</h3>
+        <h3 style={{marginBottom: '1rem', fontWeight: 600, color: '#3730a3'}}>Modules</h3>
         {course.modules.length === 0 && <div>No modules yet.</div>}
         {course.modules.map((mod, idx) => (
           <div key={mod.id || idx} className="course-detail-module">
-            <div className="course-detail-module-title">{mod.title}</div>
+            <div
+              className="course-detail-module-title"
+              onClick={() => setOpenModuleIdx(openModuleIdx === idx ? null : idx)}
+              style={{cursor: enrolled ? 'pointer' : 'not-allowed'}}
+            >
+              {mod.title}
+              {enrolled && (
+                <span style={{fontSize: '1.2rem', marginLeft: '0.5rem'}}>{openModuleIdx === idx ? '▲' : '▼'}</span>
+              )}
+            </div>
             {/* Only allow expansion if enrolled */}
-            {enrolled ? (
+            {enrolled && openModuleIdx === idx ? (
               <ul className="course-detail-lessons">
                 {mod.lessons.map(lesson => (
-                  <li key={lesson.id}>
-                    {lesson.title} {lesson.isDemo ? <span className="demo-badge">Demo</span> : null}
-                    {/* If enrolled or demo, show play button */}
+                  <li key={lesson.id} className="course-detail-lesson">
+                    <span>
+                      {lesson.title} {lesson.isDemo ? <span className="demo-badge">Demo</span> : null}
+                    </span>
                     {(enrolled || lesson.isDemo) && <Button color="primary" size="small">Play</Button>}
                   </li>
                 ))}
               </ul>
-            ) : (
+            ) : !enrolled ? (
               <div className="course-detail-locked">Enroll to view lessons</div>
-            )}
+            ) : null}
           </div>
         ))}
       </div>
