@@ -21,7 +21,7 @@ export const LoginPage = () => {
     setError("");
     setLoading(true);
     try {
-      const resp = await post("/api/auth/login", { body: { email, password } });
+  const resp = await post("/api/auth/login", { body: { email, password }, credentials: "include" });
       console.log("Login response:", resp);
       console.log("Login token:", resp.token);
       // On success, store token and decode user info

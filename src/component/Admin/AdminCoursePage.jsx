@@ -20,8 +20,8 @@ export const AdminCoursePage = () => {
     price: 0,
     currency: "USD",
     level: "Beginner",
-    shortDesc: "",
-    longDesc: "",
+    shortDescription: "",
+    description: "",
     thumbnailUrl: "",
     published: true
   });
@@ -49,11 +49,14 @@ export const AdminCoursePage = () => {
       params.push(`page=${page}`);
       params.push(`size=${size}`);
       const url = `/api/admin/courses${params.length ? "?" + params.join("&") : ""}`;
+      console.log('[AdminCoursePage] Fetching courses:', url);
       const res = await api(url);
+      console.log('[AdminCoursePage] Courses response:', res);
       setCourses(res.content || []);
       setTotalPages(res.totalPages || 1);
       setError("");
     } catch (err) {
+      console.error('[AdminCoursePage] Error fetching courses:', err);
       setError(err.message || "Failed to fetch courses");
     }
     setLoading(false);
@@ -67,8 +70,8 @@ export const AdminCoursePage = () => {
       price: 0,
       currency: "USD",
       level: "Beginner",
-      shortDesc: "",
-      longDesc: "",
+      shortDescription: "",
+      description: "",
       thumbnailUrl: "",
       published: true
     });
@@ -84,8 +87,8 @@ export const AdminCoursePage = () => {
       price: course.priceCents,
       currency: course.currency,
       level: course.level,
-      shortDesc: course.shortDescription,
-      longDesc: course.description,
+      shortDescription: course.shortDescription,
+      description: course.description,
       thumbnailUrl: course.thumbnailUrl,
       published: course.isActive
     });
@@ -157,6 +160,7 @@ export const AdminCoursePage = () => {
 
   async function handleFormSubmit(e) {
     e.preventDefault();
+    console.log('[AdminCoursePage] Form submit:', formMode, form, selectedCourse);
     // Confirm before add/edit
     setConfirmAction({
       type: formMode === "add" ? "add" : "edit",
@@ -165,33 +169,50 @@ export const AdminCoursePage = () => {
         setProcessing(true);
         try {
           if (formMode === "add") {
-            await api("/api/admin/courses", {
+            const payload = {
+              title: form.title,
+              slug: form.slug,
+              shortDescription: form.shortDescription,
+              thumbnailUrl: form.thumbnailUrl,
+              priceCents: form.price,
+              currency: form.currency,
+              level: form.level,
+              description: form.description,
+              isActive: form.published
+            };
+            console.log('[AdminCoursePage] Add payload:', payload);
+            const res = await api("/api/admin/courses", {
               method: "POST",
-              body: JSON.stringify(form),
+              body: JSON.stringify(payload),
               headers: { "Content-Type": "application/json" }
             });
+            console.log('[AdminCoursePage] Add response:', res);
             setToast("Course added");
           } else if (formMode === "edit" && selectedCourse) {
-            await api(`/api/admin/courses/${selectedCourse.id}`, {
+            const payload = {
+              title: form.title,
+              slug: form.slug,
+              shortDescription: form.shortDescription,
+              thumbnailUrl: form.thumbnailUrl,
+              priceCents: form.price,
+              currency: form.currency,
+              level: form.level,
+              description: form.description,
+              isActive: form.published
+            };
+            console.log('[AdminCoursePage] Edit payload:', selectedCourse.id, payload);
+            const res = await api(`/api/admin/courses/${selectedCourse.id}`, {
               method: "PUT",
-              body: JSON.stringify({
-                title: form.title,
-                slug: form.slug,
-                shortDescription: form.shortDesc,
-                thumbnailUrl: form.thumbnailUrl,
-                priceCents: form.price,
-                currency: form.currency,
-                level: form.level,
-                longDesc: form.longDesc,
-                published: form.published
-              }),
+              body: JSON.stringify(payload),
               headers: { "Content-Type": "application/json" }
             });
+            console.log('[AdminCoursePage] Edit response:', res);
             setToast("Course updated");
           }
           setShowForm(false);
           fetchCourses();
         } catch (err) {
+          console.error('[AdminCoursePage] Error saving course:', err);
           setToast(err.message || "Failed to save course");
         }
         setProcessing(false);
@@ -218,7 +239,7 @@ export const AdminCoursePage = () => {
               <div style={{color: '#2563eb', fontWeight: 500, marginBottom: '1rem'}}>Processing…</div>
             ) : (
               <div style={{display: 'flex', gap: '1.5rem', justifyContent: 'center'}}>
-                <Button color="primary" size="medium" onClick={confirmAction.onConfirm}>Confirm</Button>
+                <Button color="primary" size="medium" type="button" onClick={e => { e.stopPropagation(); console.log('[AdminCoursePage] Confirm modal:', confirmAction); confirmAction.onConfirm(); }}>Confirm</Button>
                 <Button color="secondary" size="medium" onClick={() => setConfirmAction(null)}>Cancel</Button>
               </div>
             )}
@@ -231,7 +252,7 @@ export const AdminCoursePage = () => {
           <h2>Admin Courses</h2>
           <Button color="primary" size="medium" onClick={openAddForm}>Add Course</Button>
         </div>
-        <Button color="secondary" size="medium" onClick={() => window.location.href = '/admin'}>Home</Button>
+    <Button color="secondary" size="medium" onClick={() => window.location.href = '/'}>Home</Button>
       </header>
       {/* Filters */}
       <div className="admin-course-filters" style={{display: 'flex', gap: '1.5rem', marginBottom: '1.5rem', alignItems: 'center'}}>
@@ -269,7 +290,7 @@ export const AdminCoursePage = () => {
                   <div className="admin-course-meta">
                     <h3>{course.title}</h3>
                     <div className="admin-course-slug">Slug: {course.slug}</div>
-                    <div className="admin-course-level">Level: {course.level}</div>
+                    <div className="admin-course-level">Level: {course.level ? course.level.charAt(0).toUpperCase() + course.level.slice(1).toLowerCase() : ""}</div>
                     <div className="admin-course-price">Price: ${(course.priceCents / 100).toFixed(2)} {course.currency}</div>
                     <div className="admin-course-status">{course.isActive ? "Active" : "Inactive"}</div>
                   </div>
@@ -304,7 +325,7 @@ export const AdminCoursePage = () => {
             </div>
             <div className="admin-course-form-row">
               <label>Level<input type="text" value={form.level} onChange={e => setForm({ ...form, level: e.target.value })} required maxLength={50} /></label>
-              <label>Short Description<input type="text" value={form.shortDesc} onChange={e => setForm({ ...form, shortDesc: e.target.value })} required maxLength={280} /></label>
+              <label>Short Description<input type="text" value={form.shortDescription} onChange={e => setForm({ ...form, shortDescription: e.target.value })} required maxLength={280} /></label>
             </div>
             <div className="admin-course-form-row">
               <label>Thumbnail URL<input type="text" value={form.thumbnailUrl} onChange={e => setForm({ ...form, thumbnailUrl: e.target.value })} required maxLength={255} /></label>
@@ -313,7 +334,7 @@ export const AdminCoursePage = () => {
               </label>
             </div>
             <div className="admin-course-form-row">
-              <label style={{flex: 1}}>Long Description<textarea value={form.longDesc} onChange={e => setForm({ ...form, longDesc: e.target.value })} required /></label>
+              <label style={{flex: 1}}>Long Description<textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} required /></label>
             </div>
             <div className="admin-course-form-actions">
               <Button color="primary" size="medium" type="submit">{formMode === "add" ? "Add" : "Update"}</Button>

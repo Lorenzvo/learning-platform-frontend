@@ -74,13 +74,49 @@ export async function api(path: string, options: any = {}) {
         // Refresh failed, log out
         localStorage.removeItem("jwt");
         localStorage.removeItem("user");
-        window.location.href = "/login";
+        // Show message and delay redirect
+        if (!document.getElementById('session-expired-toast')) {
+          const toast = document.createElement('div');
+          toast.id = 'session-expired-toast';
+          toast.textContent = 'Session expired. Redirecting to login…';
+          toast.style.position = 'fixed';
+          toast.style.top = '24px';
+          toast.style.left = '50%';
+          toast.style.transform = 'translateX(-50%)';
+          toast.style.background = '#3730a3';
+          toast.style.color = '#fff';
+          toast.style.padding = '1rem 2rem';
+          toast.style.borderRadius = '8px';
+          toast.style.zIndex = '9999';
+          document.body.appendChild(toast);
+        }
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 60000);
         throw new Error("Session expired. Please log in again.");
       }
     } catch {
       localStorage.removeItem("jwt");
       localStorage.removeItem("user");
-      window.location.href = "/login";
+      // Show message and delay redirect
+      if (!document.getElementById('session-expired-toast')) {
+        const toast = document.createElement('div');
+        toast.id = 'session-expired-toast';
+        toast.textContent = 'Session expired. Redirecting to login…';
+        toast.style.position = 'fixed';
+        toast.style.top = '24px';
+        toast.style.left = '50%';
+        toast.style.transform = 'translateX(-50%)';
+        toast.style.background = '#3730a3';
+        toast.style.color = '#fff';
+        toast.style.padding = '1rem 2rem';
+        toast.style.borderRadius = '8px';
+        toast.style.zIndex = '9999';
+        document.body.appendChild(toast);
+      }
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 60000);
       throw new Error("Session expired. Please log in again.");
     }
   }
@@ -103,4 +139,8 @@ export function post(path: string, options: any = {}) {
 
 export function del(path: string, options: any = {}) {
   return api(path, { ...options, method: "DELETE" });
+}
+
+export function put(path: string, options: any = {}) {
+  return api(path, { ...options, method: "PUT" });
 }
