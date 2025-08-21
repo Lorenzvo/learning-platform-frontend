@@ -144,7 +144,19 @@ export const CourseDetailPage = () => {
                     <span>
                       {lesson.title} {lesson.isDemo ? <span className="demo-badge">Demo</span> : null}
                     </span>
-                    {(enrolled || lesson.isDemo) && <Button color="primary" size="small">Play</Button>}
+                    {(enrolled || lesson.isDemo) && (
+                      <Button
+                        color="primary"
+                        size="small"
+                        onClick={() => {
+                          if (lesson.contentUrl) {
+                            window.open(lesson.contentUrl, "_blank", "noopener,noreferrer");
+                          }
+                        }}
+                      >
+                        Play
+                      </Button>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -158,21 +170,17 @@ export const CourseDetailPage = () => {
       {/* Reviews section at bottom */}
       <div className="course-detail-reviews-list" style={{marginTop: '2.5rem', padding: '2rem 0', borderTop: '1px solid #e5e7eb'}}>
         <h3 style={{fontWeight: 600, color: '#3730a3', marginBottom: '1rem'}}>Recent Reviews</h3>
-        {course.reviews && course.reviews.length > 0 ? (
-          course.reviews
-            .slice()
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-            .slice(0, 5)
-            .map((review, idx) => (
-              <div key={review.id || idx} className="course-detail-review" style={{marginBottom: '1.2rem', paddingBottom: '1.2rem', borderBottom: '1px solid #f3f4f6'}}>
-                <div style={{display: 'flex', alignItems: 'center', gap: '0.7rem'}}>
-                  <span style={{fontWeight: 500, color: '#2563eb'}}>{review.userId}</span>
-                  <span style={{color: '#f59e42', fontWeight: 700}}>{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span>
-                  <span style={{fontSize: '0.95rem', color: '#6b7280'}}>{new Date(review.createdAt).toLocaleDateString()}</span>
-                </div>
-                <div style={{marginTop: '0.5rem', color: '#111', fontSize: '1.05rem'}}>{review.text}</div>
+        {course.recentReviews && course.recentReviews.length > 0 ? (
+          course.recentReviews.map((review, idx) => (
+            <div key={review.id || idx} className="course-detail-review" style={{marginBottom: '1.2rem', paddingBottom: '1.2rem', borderBottom: '1px solid #f3f4f6'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '0.7rem'}}>
+                <span style={{fontWeight: 500, color: '#2563eb'}}>{review.userName || review.userId}</span>
+                <span style={{color: '#f59e42', fontWeight: 700}}>{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span>
+                <span style={{fontSize: '0.95rem', color: '#6b7280'}}>{new Date(review.createdAt).toLocaleDateString()}</span>
               </div>
-            ))
+              <div style={{marginTop: '0.5rem', color: '#111', fontSize: '1.05rem'}}>{review.text || review.comment}</div>
+            </div>
+          ))
         ) : (
           <div>No reviews yet.</div>
         )}
@@ -188,13 +196,10 @@ export const CourseDetailPage = () => {
                 await api(`/api/courses/${course.id}/reviews`, {
                   method: 'POST',
                   body: JSON.stringify({
-                    text: reviewText,
+                    comment: reviewText,
                     rating: reviewRating
                   }),
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-                  }
+                  // Let api.ts handle headers and auth
                 });
                 setReviewText("");
                 setReviewRating(5);
@@ -202,6 +207,7 @@ export const CourseDetailPage = () => {
                 const updatedCourse = await api(`/api/courses/${course.id}`);
                 setCourse(updatedCourse);
                 setToast("Review posted!");
+                setTimeout(() => setToast(null), 2000);
               } catch (err) {
                 setToast(err.message || "Failed to post review");
               }
