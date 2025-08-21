@@ -1,4 +1,14 @@
+// Helper to check for valid thumbnail URL
+function isValidUrl(url) {
+  if (!url || typeof url !== 'string') return false;
+  const trimmed = url.trim();
+  if (!trimmed) return false;
+  // Optionally check for valid image extension
+  if (!/^https?:\/\/.+\.(jpg|jpeg|png|gif|svg|webp)$/i.test(trimmed)) return false;
+  return true;
+}
 import React, { useEffect, useState } from "react";
+
 import { useParams } from "react-router-dom";
 import { api } from "../../lib/api.ts";
 import { useCart } from "../../context/useCart";
@@ -12,6 +22,7 @@ export const CourseDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState("");
   const [enrollments, setEnrollments] = useState([]);
+  const [redirecting, setRedirecting] = useState(false);
   const { add } = useCart();
 
   useEffect(() => {
@@ -24,7 +35,20 @@ export const CourseDetailPage = () => {
         setEnrollments(Array.isArray(enrollmentsData) ? enrollmentsData : []);
         setError(null);
       })
-      .catch(e => setError(e.message))
+      .catch(e => {
+        const msg = (e.message || '').toLowerCase();
+        const notLoggedIn = !localStorage.getItem('jwt');
+        if (
+          e.code === 401 || e.status === 401 ||
+          msg.includes('unauthorized') || msg.includes('not authorized') ||
+          (msg.includes('course not found') && notLoggedIn)
+        ) {
+          setRedirecting(true);
+          window.location.href = '/login';
+        } else {
+          setError(e.message);
+        }
+      })
       .finally(() => setLoading(false));
   }, [slug]);
 
@@ -48,13 +72,18 @@ export const CourseDetailPage = () => {
 
   console.log("Rendering CourseDetailPage", course, course?.id);
   if (loading) return <div className="course-detail-loading">Loading…</div>;
+  if (redirecting) return null;
   if (error) return <div className="course-detail-error">Error: {error}</div>;
   if (!course) return <div className="course-detail-empty">Course not found.</div>;
-
+  console.log("Thumbnail URL:", course && course.thumbnailUrl);
   return (
     <section className="course-detail-page">
       <header className="course-detail-header">
-        <img src={course.thumbnailUrl} alt={course.title} style={{height: '120px', borderRadius: '8px', marginRight: '2rem'}} />
+        <img
+          src={isValidUrl(course.thumbnailUrl) ? course.thumbnailUrl : '/vite.svg'}
+          alt={course.title}
+          style={{height: '120px', borderRadius: '8px', marginRight: '2rem'}}
+        />
         <div>
           <h2 className="course-detail-title">{course.title}</h2>
           <span className="course-detail-price">${(course.price / 100).toFixed(2)}</span>

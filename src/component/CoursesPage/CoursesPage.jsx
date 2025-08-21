@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "../Button/Button";
@@ -109,7 +110,6 @@ export const CoursesPage = () => {
   return (
     <section className="courses-page">
       <header className="courses-page__header">
-        <h2>Our Courses</h2>
         <div className="courses-page__controls" style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
           {/* Sort UI: updates query param, triggers server-side sort */}
           <div className="courses-page__select">
@@ -229,37 +229,34 @@ export const CoursesPage = () => {
             >
               <article className="courses-page__card">
                 <img
-                  src={'https://via.placeholder.com/320x180?text=No+Image'}
+                  src={course.thumbnailUrl ? course.thumbnailUrl : 'https://via.placeholder.com/320x180?text=No+Image'}
                   alt={course.title}
                   className="courses-page__image"
                 />
                 <div className="courses-page__content">
                   <h3 className="courses-page__title">{course.title}</h3>
-                  <p className="courses-page__description">{course.description}</p>
+                  <p className="courses-page__description">{course.shortDesc || course.description}</p>
+                </div>
+                <div className="courses-page__meta-row">
+                  <div className="courses-page__meta-group">
+                    {typeof course.averageRating === 'number' && (
+                      <span className="courses-page__meta-pill courses-page__rating">
+                        {course.averageRating.toFixed(1)} ★
+                      </span>
+                    )}
+                    {course.level && (
+                      <span className="courses-page__meta-pill courses-page__level">
+                        {course.level.charAt(0).toUpperCase() + course.level.slice(1).toLowerCase()}
+                      </span>
+                    )}
+                  </div>
                   {typeof course.priceCents === 'number' && (
-                    <span className="courses-page__price">
+                    <span className="courses-page__meta-pill courses-page__price">
                       ${(course.priceCents / 100).toFixed(2)}
                     </span>
                   )}
-                  {/* Display level */}
-                  {course.level && (
-                    <span className="courses-page__level" style={{ display: 'block', fontSize: '0.95em', color: '#555', marginTop: 2 }}>
-                      Level: {course.level}
-                    </span>
-                  )}
-                  {/* Display average rating */}
-                  {typeof course.averageRating === 'number' && (
-                    <span className="courses-page__rating" style={{ display: 'block', fontSize: '0.95em', color: '#555', marginTop: 2 }}>
-                      Rating: {course.averageRating.toFixed(1)} ★
-                    </span>
-                  )}
-                  {/* Display instructor name if available */}
-                  {course.instructor && course.instructor.name && (
-                    <span className="courses-page__instructor" style={{ display: 'block', fontSize: '0.95em', color: '#555', marginTop: 2 }}>
-                      Instructor: {course.instructor.name}
-                    </span>
-                  )}
                 </div>
+                {/* Removed instructor display, now showing shortDesc above */}
               </article>
             </Link>
           ))}

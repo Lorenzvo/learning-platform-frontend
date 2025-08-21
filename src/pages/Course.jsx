@@ -11,7 +11,19 @@ export default function Course() {
   useEffect(() => {
     api(`/api/courses/${slug}`)
       .then(setCourse)
-      .catch(e => setErr(e.message))
+      .catch(e => {
+        const msg = (e.message || '').toLowerCase();
+        const notLoggedIn = !localStorage.getItem('jwt');
+        if (
+          e.code === 401 || e.status === 401 ||
+          msg.includes('unauthorized') || msg.includes('not authorized') ||
+          (msg.includes('course not found') && notLoggedIn)
+        ) {
+          window.location.href = '/login';
+        } else {
+          setErr(e.message);
+        }
+      })
   }, [slug])
 
   if (err) return <div className="p-4 text-red-700">Error: {err}</div>

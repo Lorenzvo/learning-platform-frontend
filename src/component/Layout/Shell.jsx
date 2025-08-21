@@ -200,7 +200,7 @@ export function Shell({ children }) {
         <span className="text-xs text-gray-400 sr-only">{location.pathname}</span>
       </header>
       {/* Main content area, children are rendered here */}
-      <main className="max-w-4xl mx-auto py-8 px-4">
+      <main style={{width: '100vw', margin: 0, padding: 0}}>
         {children}
       </main>
     </div>

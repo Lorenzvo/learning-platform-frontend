@@ -47,14 +47,11 @@ export const HomePage = () => {
     <div className="homepage-container">
       {/* Stack Overflow-style blue banner hero */}
       <section
-        className="relative left-1 right-0 -mx-[50vw] w-screen h-[260px] md:h-[380px] flex items-center !mt-[-32px] bg-cover bg-center bg-no-repeat"
+        className="relative left-1 right-0 -mx-[50vw] w-screen h-[260px] md:h-[380px] flex items-center bg-cover bg-center bg-no-repeat"
         aria-label="Blue background banner for EdNova homepage"
-        style={{
-          backgroundImage: `url(/src/assets/bluebackground.png)`
-        }}
+        style={{ backgroundImage: "url('/src/assets/bluebackground.png')" }}
       >
-        {/* Overlay for contrast */}
-        <div className="absolute inset-0 bg-blue-900 bg-opacity-60 pointer-events-none" />
+  {/* Overlay removed so PNG background is fully visible */}
         {/* Content container, left-aligned */}
         <div className="relative z-10 max-w-5xl pl-2 md:pl-8 flex flex-col justify-center h-full text-left">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4" tabIndex={0}>
