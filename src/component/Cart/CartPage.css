@@ -1,3 +1,8 @@
+.cart-page__card--row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
 .cart-page {
   padding: 2rem;
   max-width: 900px;
@@ -31,8 +36,8 @@
 
 .cart-page__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.2rem;
 }
 
 .cart-page__card {
@@ -43,6 +48,15 @@
   display: flex;
   flex-direction: column;
   transition: transform 0.2s ease;
+  padding: 0.5rem 0.5rem;
+  min-height: 80px;
+}
+.cart-page__image {
+  width: 180px !important;
+  height: auto;
+  border-radius: 8px;
+  margin-right: 1rem;
+  align-self: center;
 }
 
 .cart-page__card:hover {

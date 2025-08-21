@@ -118,7 +118,7 @@ export function Shell({ children }) {
             <div className="relative group">
               <span className="text-base font-medium text-gray-700 cursor-pointer px-2 py-1 rounded hover:bg-indigo-50 transition">Community</span>
               <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg text-xs text-gray-600 px-2 py-1 z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150">
-                Discussion forums coming soon
+                Discussion forums coming soon.
               </div>
             </div>
             {user && user.roles && user.roles.some(r => r.toLowerCase() === "admin") ? (

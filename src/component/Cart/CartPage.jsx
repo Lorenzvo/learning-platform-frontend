@@ -38,23 +38,23 @@ export const CartPage = () => {
       {!loading && !error && items.length > 0 && (
         <div className="cart-page__grid">
           {items.map(item => (
-            <article key={item.courseId} className="cart-page__card">
-              {item.thumbnailUrl && (
-                <img
-                  src={item.thumbnailUrl}
-                  alt={item.title}
-                  className="cart-page__image"
-                  style={{ width: "120px", borderRadius: "8px", marginRight: "1rem" }}
-                />
-              )}
-              <div className="cart-page__content">
-                <h3 className="cart-page__title">{item.title || `Course #${item.courseId}`}</h3>
-                <span className="cart-page__price">${(item.priceCents / 100).toFixed(2)}</span>
-                <Button color="secondary" size="small" onClick={() => remove(item.courseId)}>
-                  Remove
-                </Button>
-              </div>
-            </article>
+              <article key={item.courseId} className="cart-page__card cart-page__card--row">
+                {item.thumbnailUrl && (
+                  <img
+                    src={item.thumbnailUrl}
+                    alt={item.title}
+                    className="cart-page__image"
+                    style={{ width: "150px", borderRadius: "8px", marginRight: "1rem", alignSelf: "center" }}
+                  />
+                )}
+                <div className="cart-page__content">
+                  <h3 className="cart-page__title">{item.title || `Course #${item.courseId}`}</h3>
+                  <span className="cart-page__price">${(item.priceCents / 100).toFixed(2)}</span>
+                  <Button color="secondary" size="small" onClick={() => remove(item.courseId)}>
+                    Remove
+                  </Button>
+                </div>
+              </article>
           ))}
         </div>
       )}
