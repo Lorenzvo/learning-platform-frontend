@@ -36,27 +36,55 @@ export const EnrollmentsPage = () => {
         </div>
       )}
       {!loading && !error && enrollments.length > 0 && (
-        <div className="enrollments-page__grid">
+        <div className="courses-page__grid">
           {enrollments.map((enrollment) => (
-            <article key={enrollment.id || enrollment.courseId} className="enrollments-page__card">
-              <img
-                src={enrollment.courseThumbnailUrl || 'https://via.placeholder.com/320x180?text=No+Image'}
-                alt={enrollment.courseTitle}
-                className="enrollments-page__image"
-              />
-              <div className="enrollments-page__content">
-                <h3 className="enrollments-page__title">{enrollment.courseTitle || 'Untitled Course'}</h3>
-                <p className="enrollments-page__description">{enrollment.courseDescription || ''}</p>
-                <span className="enrollments-page__status">Status: {enrollment.status || 'Active'}</span>
-                {enrollment.status === 'CANCELED' && (
-                  <a href={`/checkout?courseId=${enrollment.courseId}`} style={{ textDecoration: 'none' }}>
-                    <Button color="primary" size="small" style={{ marginTop: '0.5rem' }}>
+            enrollment.status !== 'CANCELED' ? (
+              <a
+                key={enrollment.id || enrollment.courseId}
+                href={`/courses/${enrollment.slug}`}
+                className="courses-page__card-link"
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                <article className="courses-page__card">
+                  <img
+                    src={enrollment.thumbnailUrl || 'https://via.placeholder.com/320x180?text=No+Image'}
+                    alt={enrollment.courseTitle}
+                    className="courses-page__image"
+                  />
+                  <div className="courses-page__content">
+                    <h3 className="courses-page__title">{enrollment.courseTitle || 'Untitled Course'}</h3>
+                    <p className="courses-page__description">{enrollment.shortDesc || enrollment.courseDescription || ''}</p>
+                  </div>
+                  <div className="courses-page__meta-row" style={{ alignItems: 'flex-end' }}>
+                    <span className="courses-page__meta-pill courses-page__status" style={{ marginRight: '0', marginLeft: 'auto', alignSelf: 'flex-end' }}>
+                      {enrollment.status || 'Active'}
+                    </span>
+                  </div>
+                </article>
+              </a>
+            ) : (
+              <article key={enrollment.id || enrollment.courseId} className="courses-page__card">
+                <img
+                  src={enrollment.thumbnailUrl || 'https://via.placeholder.com/320x180?text=No+Image'}
+                  alt={enrollment.courseTitle}
+                  className="courses-page__image"
+                />
+                <div className="courses-page__content">
+                  <h3 className="courses-page__title">{enrollment.courseTitle || 'Untitled Course'}</h3>
+                  <p className="courses-page__description">{enrollment.shortDesc || enrollment.courseDescription || ''}</p>
+                </div>
+                <div className="courses-page__meta-row" style={{ alignItems: 'flex-end' }}>
+                  <a href={`/checkout?courseId=${enrollment.courseId}`} style={{ textDecoration: 'none', marginLeft: '0', alignSelf: 'flex-end' }}>
+                    <Button color="primary" size="small" style={{ marginTop: '0.5rem', alignSelf: 'flex-end' }}>
                       Reactivate
                     </Button>
                   </a>
-                )}
-              </div>
-            </article>
+                  <span className="courses-page__meta-pill courses-page__status" style={{ marginRight: '0', marginLeft: 'auto', alignSelf: 'flex-end' }}>
+                    {enrollment.status || 'Active'}
+                  </span>
+                </div>
+              </article>
+            )
           ))}
         </div>
       )}
