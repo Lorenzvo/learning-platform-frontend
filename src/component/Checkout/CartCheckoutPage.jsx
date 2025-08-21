@@ -11,7 +11,7 @@ import { useCart } from "../../context/useCart";
 function CartCheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
-  const { clear } = useCart();
+  const { refresh } = useCart();
   const [clientSecret, setClientSecret] = useState("");
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
@@ -44,7 +44,7 @@ function CartCheckoutForm() {
       setProcessing(false);
     } else if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
       setStatus("Payment successful! You are now enrolled.");
-      clear();
+      await refresh();
       setProcessing(false);
     } else {
       setError("Payment failed or incomplete.");

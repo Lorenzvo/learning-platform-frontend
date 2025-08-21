@@ -1,94 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 .login-page {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
-  background: #f5f6fa; /* subtle background */
+  align-items: flex-start;
+  padding-top: 8vh;
+  background: linear-gradient(120deg, #f5f6fa 0%, #e0e7ff 100%);
+  font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .login-container {
-  width: 400px; /* Adjust as needed */
+  width: 420px;
+  min-height: 480px;
+  max-height: 600px;
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 32px rgba(80, 112, 255, 0.10);
+  padding: 2rem 2rem 1.5rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
 }
 
 .login-header {
   position: relative;
-  margin-bottom: 32px;
-}
-
-.background-image {
-  display: none;
+  margin-bottom: 24px;
 }
 
 .student-illustration {
-  width: 120px;
-  height: auto;
-  margin: 0 auto 16px;
-}
-
-.icon-frame {
-  display: none;
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin: 0 auto 8px;
+  display: block;
 }
 
 .logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .logo-icon {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
 }
 
 .logo-text {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
   color: #4f46e5;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Inter', 'Roboto', sans-serif;
   margin: 0;
+  letter-spacing: 0.5px;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
+  width: 100%;
 }
 
-.input-group {
-  background-color: #f3f4f6;
+.modern-input {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 2px 0 2px 0;
+  box-shadow: 0 1px 2px rgba(80,112,255,0.04);
+}
+
+.login-error {
+  background: #fee2e2;
+  color: #b91c1c;
   border-radius: 6px;
-  padding: 4px;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  text-align: center;
 }
 
 .button-group {
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
-.login-links {
-  margin-top: 24px;
-  font-family: "Roboto", sans-serif;
-  font-size: 14px;
+.sleek-links {
+  margin-top: 32px;
+  width: 100%;
+  position: relative;
 }
 
-.link-row {
+.bottom-row {
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
+  align-items: flex-end;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -32px;
+  padding: 0 8px;
 }
 
-.link {
-  color: #6cace4;
+.left-link {
+  text-align: left;
+  color: #4f46e5;
+  font-weight: 600;
+  font-size: 1rem;
   text-decoration: none;
+  transition: color 0.2s;
+}
+.left-link:hover {
+  color: #312e81;
 }
 
-.link.secondary {
+.right-link {
+  text-align: right;
   color: #6b7280;
+  font-weight: 500;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.right-link:hover {
+  color: #4f46e5;
 }

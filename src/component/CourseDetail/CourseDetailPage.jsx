@@ -32,7 +32,14 @@ export const CourseDetailPage = () => {
     ])
       .then(([courseData, enrollmentsData]) => {
         setCourse(courseData);
-        setEnrollments(Array.isArray(enrollmentsData) ? enrollmentsData : []);
+        // Use .content for paginated enrollments
+        if (enrollmentsData && Array.isArray(enrollmentsData.content)) {
+          setEnrollments(enrollmentsData.content);
+        } else if (Array.isArray(enrollmentsData)) {
+          setEnrollments(enrollmentsData);
+        } else {
+          setEnrollments([]);
+        }
         setError(null);
       })
       .catch(e => {
