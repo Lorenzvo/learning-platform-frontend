@@ -178,13 +178,12 @@ export const AdminCoursePage = () => {
               currency: form.currency,
               level: form.level,
               description: form.description,
-              isActive: form.published
+              published: form.published
             };
             console.log('[AdminCoursePage] Add payload:', payload);
             const res = await api("/api/admin/courses", {
               method: "POST",
-              body: JSON.stringify(payload),
-              headers: { "Content-Type": "application/json" }
+              body: payload
             });
             console.log('[AdminCoursePage] Add response:', res);
             setToast("Course added");
@@ -203,8 +202,7 @@ export const AdminCoursePage = () => {
             console.log('[AdminCoursePage] Edit payload:', selectedCourse.id, payload);
             const res = await api(`/api/admin/courses/${selectedCourse.id}`, {
               method: "PUT",
-              body: JSON.stringify(payload),
-              headers: { "Content-Type": "application/json" }
+              body: payload
             });
             console.log('[AdminCoursePage] Edit response:', res);
             setToast("Course updated");
