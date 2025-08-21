@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
+// Removed stray 'ho' line
 import { api } from "../../lib/api.ts";
 import { Button } from "../Button/Button";
 import "./AdminCoursePage.css";
 
 export const AdminCoursePage = () => {
+  // Confirmation modal state
+  const [confirmAction, setConfirmAction] = useState(null); // { type, slug, onConfirm }
+  const [processing, setProcessing] = useState(false);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -90,65 +94,137 @@ export const AdminCoursePage = () => {
   }
 
   async function handleDelete(courseId) {
-    if (!window.confirm("Are you sure you want to delete this course?")) return;
-    try {
-      await api(`/api/admin/courses/${courseId}`, { method: "DELETE" });
-      setToast("Course deleted");
-      fetchCourses();
-    } catch (err) {
-      setToast(err.message || "Failed to delete course");
-    }
-  setTimeout(() => setToast("") , 2000);
+    const course = courses.find(c => c.id === courseId);
+    setConfirmAction({
+      type: "delete",
+      slug: course?.slug,
+      onConfirm: async () => {
+        setProcessing(true);
+        try {
+          await api(`/api/admin/courses/${courseId}`, { method: "DELETE" });
+          setToast("Course deleted");
+          fetchCourses();
+        } catch (err) {
+          setToast(err.message || "Failed to delete course");
+        }
+        setProcessing(false);
+        setConfirmAction(null);
+        setTimeout(() => setToast("") , 2000);
+      }
+    });
   }
 
   async function handlePublish(courseId, publish) {
-    try {
-      await api(`/api/admin/courses/${courseId}/${publish ? "publish" : "unpublish"}`, { method: "POST" });
-      setToast(publish ? "Course published" : "Course unpublished");
-      fetchCourses();
-    } catch (err) {
-      setToast(err.message || "Failed to update publish status");
+    const course = courses.find(c => c.id === courseId);
+    if (!publish) {
+      setConfirmAction({
+        type: "unpublish",
+        slug: course?.slug,
+        onConfirm: async () => {
+          setProcessing(true);
+          try {
+            await api(`/api/admin/courses/${courseId}/unpublish`, { method: "POST" });
+            setToast("Course unpublished");
+            fetchCourses();
+          } catch (err) {
+            setToast(err.message || "Failed to unpublish course");
+          }
+          setProcessing(false);
+          setConfirmAction(null);
+          setTimeout(() => setToast("") , 2000);
+        }
+      });
+    } else {
+      setConfirmAction({
+        type: "publish",
+        slug: course?.slug,
+        onConfirm: async () => {
+          setProcessing(true);
+          try {
+            await api(`/api/admin/courses/${courseId}/publish`, { method: "POST" });
+            setToast("Course published");
+            fetchCourses();
+          } catch (err) {
+            setToast(err.message || "Failed to publish course");
+          }
+          setProcessing(false);
+          setConfirmAction(null);
+          setTimeout(() => setToast("") , 2000);
+        }
+      });
     }
-  setTimeout(() => setToast("") , 2000);
   }
 
   async function handleFormSubmit(e) {
     e.preventDefault();
-    try {
-      if (formMode === "add") {
-        await api("/api/admin/courses", {
-          method: "POST",
-          body: JSON.stringify(form),
-          headers: { "Content-Type": "application/json" }
-        });
-        setToast("Course added");
-      } else if (formMode === "edit" && selectedCourse) {
-        await api(`/api/admin/courses/${selectedCourse.id}`, {
-          method: "PUT",
-          body: JSON.stringify({
-            title: form.title,
-            slug: form.slug,
-            shortDescription: form.shortDesc,
-            thumbnailUrl: form.thumbnailUrl,
-            priceCents: form.price,
-            currency: form.currency,
-            level: form.level,
-            longDesc: form.longDesc,
-            published: form.published
-          }),
-          headers: { "Content-Type": "application/json" }
-        });
-        setToast("Course updated");
+    // Confirm before add/edit
+    setConfirmAction({
+      type: formMode === "add" ? "add" : "edit",
+      slug: form.slug,
+      onConfirm: async () => {
+        setProcessing(true);
+        try {
+          if (formMode === "add") {
+            await api("/api/admin/courses", {
+              method: "POST",
+              body: JSON.stringify(form),
+              headers: { "Content-Type": "application/json" }
+            });
+            setToast("Course added");
+          } else if (formMode === "edit" && selectedCourse) {
+            await api(`/api/admin/courses/${selectedCourse.id}`, {
+              method: "PUT",
+              body: JSON.stringify({
+                title: form.title,
+                slug: form.slug,
+                shortDescription: form.shortDesc,
+                thumbnailUrl: form.thumbnailUrl,
+                priceCents: form.price,
+                currency: form.currency,
+                level: form.level,
+                longDesc: form.longDesc,
+                published: form.published
+              }),
+              headers: { "Content-Type": "application/json" }
+            });
+            setToast("Course updated");
+          }
+          setShowForm(false);
+          fetchCourses();
+        } catch (err) {
+          setToast(err.message || "Failed to save course");
+        }
+        setProcessing(false);
+        setConfirmAction(null);
+        setTimeout(() => setToast("") , 2000);
       }
-      setShowForm(false);
-      fetchCourses();
-    } catch (err) {
-      setToast(err.message || "Failed to save course");
-    }
-  setTimeout(() => setToast("") , 2000);
+    });
   }
 
   return (
+  // ...existing code...
+  <>
+      {confirmAction && (
+        <div className="admin-course-confirm-modal" style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.12)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+          <div style={{background: '#fff', borderRadius: '12px', boxShadow: '0 2px 16px rgba(80,112,255,0.12)', padding: '2rem 2.5rem', minWidth: '320px', maxWidth: '90vw', textAlign: 'center'}}>
+            <h4 style={{fontWeight: 600, fontSize: '1.2rem', color: '#3730a3', marginBottom: '1.2rem'}}>
+              {confirmAction.type === 'add' && `Add course ${confirmAction.slug}?`}
+              {confirmAction.type === 'edit' && `Edit course ${confirmAction.slug}?`}
+              {confirmAction.type === 'delete' && `Delete course ${confirmAction.slug}?`}
+              {confirmAction.type === 'unpublish' && `Unpublish course ${confirmAction.slug}?`}
+              {confirmAction.type === 'publish' && `Publish course ${confirmAction.slug}?`}
+            </h4>
+            {processing ? (
+              <div style={{color: '#2563eb', fontWeight: 500, marginBottom: '1rem'}}>Processing…</div>
+            ) : (
+              <div style={{display: 'flex', gap: '1.5rem', justifyContent: 'center'}}>
+                <Button color="primary" size="medium" onClick={confirmAction.onConfirm}>Confirm</Button>
+                <Button color="secondary" size="medium" onClick={() => setConfirmAction(null)}>Cancel</Button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     <section className="admin-course-page">
       <header className="admin-course-header" style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem'}}>
         <div style={{display: 'flex', alignItems: 'center', gap: '1.5rem'}}>
@@ -247,5 +323,6 @@ export const AdminCoursePage = () => {
         </div>
       )}
     </section>
+    </>
   );
 };
